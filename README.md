@@ -6,3 +6,6 @@ Aria helper CHRLINE version.
 ```
 pip install -r requirements.txt
 ```
+
+
+CHRLINE is copyright by DeachSword
