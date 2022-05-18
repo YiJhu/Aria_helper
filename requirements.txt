@@ -5,4 +5,5 @@ httpx[http2]
 gevent
 CHRLINE
 futures
+concurrent
 pybase64
