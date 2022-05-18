@@ -7,3 +7,4 @@ CHRLINE
 futures
 concurrent
 pybase64
+logging
