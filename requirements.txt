@@ -4,6 +4,5 @@ xxhash
 httpx[http2]
 gevent
 CHRLINE
-concurrent
-shutil
+futures
 pybase64
