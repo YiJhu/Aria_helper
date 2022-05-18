@@ -3,3 +3,4 @@ pycryptodemo
 xxhash
 httpx[http2]
 gevent
+CHRLINE
