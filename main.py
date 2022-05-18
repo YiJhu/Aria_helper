@@ -375,7 +375,7 @@ while True:
                 
             if op[3] == 124 and bot.profile[1] in op[12]:
                 try:
-                    if settings['bot']['auto_join'] == True:
+                    #if settings['bot']['auto_join'] == True:
                         if op[11] in Admin or op[11] in Owner:
                             bot.acceptChatInvitation(op[10])
                             bot.sendMessage(op[10], 'THANKS FOR USEING.')
@@ -392,7 +392,7 @@ while True:
                             bot.sendMessage(op[10], 'No PERMISSION.')
                             bot.deleteSelfFromChat(op[10])
                             #bot.rejectChatInvitation(op[10])
-                    else:
-                        continue
+                    #else:
+                        #continue
                 except:
                     continue
