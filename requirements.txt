@@ -5,6 +5,7 @@ httpx[http2]
 gevent
 CHRLINE
 futures
+shutil
 concurrent
 pybase64
 logging
