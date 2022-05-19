@@ -1,5 +1,4 @@
 CHRLINE
-futures
 pytest-shutil
 pybase64
 logging
