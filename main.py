@@ -260,7 +260,7 @@ while True:
                             if contentMetadata['GC_EVT_TYPE'] == 'S':
                                 bot.sendMessage(msg[2], "【" + type_voices+ " Start】\nCorrespondent：" + bot.getContact(msg[1])[22] + "\n" + time.strftime('%H:%M:%S'))
                             if contentMetadata['GC_EVT_TYPE'] == 'E':
-                                return
+                                pass
 
                 if msg[15] == 13:
                     if msg[3] == 2:
@@ -339,10 +339,13 @@ while True:
                             if 'text' in contentMetadata:
                                 p_post += "\n[Post Preview]\n%s" %(contentMetadata['text'])
                             if 'mediaOid' in contentMetadata:
+                                stra = contentMetadata['mediaOid'].replace("svc=","/")
+                                strb = stra.replace("|sid=","/")
+                                mediaOid = strb.replace("|oid=","/")
                                 if contentMetadata['mediaType'] == 'I':
-                                    p_post += "\n[Media Url]\n%s/r%s" %(bot.LINE_OBS_DOMAIN, contentMetadata["mediaOid"])
+                                    p_post += "\n[Media Url]\n%s/r%s" %(bot.LINE_OBS_DOMAIN, mediaOid)
                                 elif contentMetadata['mediaType'] == 'V':
-                                    p_post += "\n[Media Url]\n%s/r%s" %(bot.LINE_OBS_DOMAIN, "darkkingtw.cf")
+                                    p_post += "\n[Media Url]\n%s/r%s" %(bot.LINE_OBS_DOMAIN, mediaOid)
                             if 'locationName' in contentMetadata:
                                 p_post += "\n[Location Name]\n%s" %(contentMetadata['locationName'])
                             if "location" in contentMetadata:
