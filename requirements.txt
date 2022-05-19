@@ -1,5 +1,6 @@
 CHRLINE
 futures
+pytest-shutil
 concurrent
 pybase64
 logging
