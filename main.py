@@ -374,7 +374,7 @@ while True:
                                 bot.sendMessage(msg[2], album)
 
                 if msg[15] == 18: #del Album or photo or inv_someone or cancel_someone
-                    return
+                    pass
                 
             if op[3] == 124 and bot.profile[1] in op[12]:
                 try:
