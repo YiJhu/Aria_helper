@@ -1,5 +1,6 @@
 pycrypto
-pycryptodemo
+pycryptodemo==3.9.8
+python-axolotl-curve25519
 xxhash
 httpx[http2]
 gevent
@@ -9,3 +10,4 @@ shutil
 concurrent
 pybase64
 logging
+qrcode
