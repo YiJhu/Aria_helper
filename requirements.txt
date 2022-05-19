@@ -1,6 +1,5 @@
 CHRLINE
 futures
-shutil
 concurrent
 pybase64
 logging
