@@ -3,10 +3,10 @@
 from CHRLINE import *
 import time, timeit, datetime, concurrent, os, shutil
 import base64
-import logging
-logging.basicConfig(level=logging.DEBUG)
+#import logging
+#logging.basicConfig(level=logging.DEBUG)
 
-bot = CHRLINE("", device="ANDROID", version="11.16.2", os_name="Aria helper", os_version="11")
+bot = CHRLINE(authTokenOrEmail = "Token or mail", password = "Password", device = "DESKTOPWIN", os_name = "Aria helper")
 
 Admin = []
 Owner = []
