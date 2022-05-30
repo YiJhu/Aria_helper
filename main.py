@@ -251,7 +251,7 @@ while True:
                                     end = time.time()
                                 bot.sendMessage(msg[2], (end - start))
 
-                if msg[15] == 6: #call
+                if msg[15] == 6: #call #Not every device is supported. exg:chrome and more...
                     if msg[3] == 2:
                         contentMetadata = msg[18]
                         stype = [{"r":"Room ","c":"Group "},{'AUDIO':"Voice Call",'VIDEO':"Video Call","LIVE":"Live Video"}]
