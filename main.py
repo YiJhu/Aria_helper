@@ -33,31 +33,31 @@ while True:
                     if msg[3] == 2:
                         if msg[1] in Owner or msg[1] in Admin:
                             if msg[10] == '#help':
-                                with concurrent.futures.ThreadPoolExecutor(max_workers=90) as executor:
+                                with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
                                     help = str(helplist)
                                     if msg[1] in Owner:
                                         help += str(
-                                            "\n#cmd:{text}\n#rename:{text}\n#rebio:{text}\n#repic:{path}\n#Kickall")
+                                            "\n#exec:{text}\n#rename:{text}\n#rebio:{text}\n#repic:{path}\n#Kickall")
                                     else:
                                         continue
                                     executor.submit(bot.sendMessage(
                                         msg[2], f"【HELP COMMAND】\n{help}"))
 
                             if msg[10] == '#speed':
-                                with concurrent.futures.ThreadPoolExecutor(max_workers=90) as executor:
+                                with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
                                     speed = timeit.timeit(
                                         '"-".join(str(n) for n in range(100))', number=10000)
                                     executor.submit(bot.sendMessage(
                                         msg[2], "SpeedTest： %s s" % (speed), relatedMessageId=msg[4]))
 
                             if msg[10] == '#time':
-                                with concurrent.futures.ThreadPoolExecutor(max_workers=90) as executor:
+                                with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
                                     stime = bot.getServerTime()
                                     executor.submit(bot.sendMessage(msg[2],  "【Now Time (UTC+8)】\n" + time.strftime(
                                         '%Y-%m-%d %I:%M:%S %p', time.localtime(stime/1000)), relatedMessageId=msg[4]))
 
                             if msg[10] == '#me':
-                                with concurrent.futures.ThreadPoolExecutor(max_workers=90) as executor:
+                                with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
                                     executor.submit(bot.sendContact(
                                         msg[2], msg[1], "darkkingtw.cf"))
 
@@ -156,12 +156,12 @@ while True:
                                 g_info += "\n[Created Time]\n" + time.strftime(
                                     '%Y-%m-%d %I:%M:%S %p', time.localtime(gid[2]/1000))
                                 try:
-                                    g_info += "\n----------------------------------------\nMembers： " + \
+                                    g_info += "\n" + "-" * 40 .join(" \nMembers： ") + \
                                         str(len(gid[20])) + \
-                                        "\nPending： " + str(len(gid[22]))
+                                        "\nInvitees： " + str(len(gid[22]))
                                 except:
-                                    g_info += "\n----------------------------------------\nMembers： " + \
-                                        str(len(gid[20])) + "\nPending： 0"
+                                    g_info += "\n" + "-" * 40 .join(" \nMembers： ") + \
+                                        str(len(gid[20])) + "\nInvitees： 0"
                                 if gid[12] is False:
                                     g_info += "\nInvitation Url： Allowed."
                                 else:
@@ -231,7 +231,8 @@ while True:
                                             continue
                                         if mid[1] not in klist:
                                             klist.append(mid[1])
-                                            with concurrent.futures.ThreadPoolExecutor(max_workers=20) as executor:
+                                            # The limit value of max_workers is 32
+                                            with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
                                                 for kmid in klist:
                                                     executor.submit(
                                                         bot.deleteOtherFromChat(msg[2], kmid))
@@ -244,6 +245,7 @@ while True:
                             if msg[10] == '#cancel':  # cancel all invitation
                                 try:
                                     clist = bot.getGroup(msg[2])[22]
+                                    # The recommended value of max_workers for this function is 3
                                     with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
                                         for Cmember in clist:
                                             start = time.time()
@@ -266,12 +268,12 @@ while True:
                                         msg[2], f'{e}', relatedMessageId=msg[4])
                         if msg[1] in Owner:
                             '''for owner'''
-                            if msg[10].startswith("#cmd:"):  # cmd:command
-                                command = msg[10][5:]
+                            if msg[10].startswith("#exec:"):  # cmd:command
+                                command = msg[10][6:]
                                 try:
                                     exec(command)
                                 except Exception as e:
-                                    bot.sendMessage(msg[2], '%s' % (e))
+                                    bot.sendMessage(msg[2], f'{e}')
 
                             if msg[10].startswith("#rename:"):  # rename:str
                                 key = msg[10][8:]
@@ -294,7 +296,8 @@ while True:
 
                             if msg[10] == '#Kickall':  # remove people
                                 klist = bot.getGroup(msg[2])[20]
-                                with concurrent.futures.ThreadPoolExecutor(max_workers=20) as executor:
+                                # The recommended value of max_workers for this function is 15
+                                with concurrent.futures.ThreadPoolExecutor(max_workers=15) as executor:
                                     start = time.time()
                                     for kmid in klist:
                                         if not kmid[1] in Owner or not kmid[1] in bot.profile[1]:
@@ -303,7 +306,8 @@ while True:
                                     end = time.time()
                                 bot.sendMessage(msg[2], (end - start))
 
-                # call #Not every device is supported. exg:chrome and more...
+                # call
+                # Not every device is supported. exg:chrome and more...
                 if msg[15] == 6:
                     if msg[3] == 2:
                         contentMetadata = msg[18]
@@ -321,7 +325,8 @@ while True:
                 if msg[15] == 13:
                     if msg[3] == 2:
                         # if msg[1] in Admin:
-                        with concurrent.futures.ThreadPoolExecutor(max_workers=90) as executor:
+                        # The limit value of max_workers is 32
+                        with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
                             someone = bot.getContact(msg[18]["mid"])
                             try:
                                 executor.submit(bot.sendMessage(msg[2], 'User Name:\n%s\nUser Mid:\n%s\nStatus Message:\n(Only show 100 words!)\n%s\nProfile Link:\n%s/%s' % (
