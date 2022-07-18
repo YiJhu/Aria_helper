@@ -6,10 +6,10 @@ import timeit
 import datetime
 import concurrent
 import os
-import shutil
+# import shutil
 import base64
 import json
-#import logging
+# import logging
 # logging.basicConfig(level=logging.DEBUG)
 
 bot = CHRLINE(authTokenOrEmail="Token or mail", password="Password",
@@ -480,16 +480,16 @@ while True:
                     if op[11] in Admin or op[11] in Owner:
                         bot.acceptChatInvitation(op[10])
                         bot.sendMessage(op[10], 'THANKS FOR USEING.')
-                        if not os.path.exists(f'data/group/{op[10]}'):
-                            os.makedirs(f'data/group/{op[10]}')
-                            with open(f'data/group/{op[10]}/setting.json', 'w') as gset:
-                                data = [{"admin": {}, "post_event": True,
-                                        "auto_read": False, "contact_event": True}]
-                                json.dump(data, gset, sort_keys=True, indent=4)
+                        # if not os.path.exists(f'data/group/{op[10]}'):
+                            # os.makedirs(f'data/group/{op[10]}')
+                            # with open(f'data/group/{op[10]}/setting.json', 'w') as gset:
+                                # data = [{"admin": {}, "post_event": True,
+                                        # "auto_read": False, "contact_event": True}]
+                                # json.dump(data, gset, sort_keys=True, indent=4)
                                 bot.sendMessage(
                                     op[10], 'Initialization succeeded')
-                        else:
-                            bot.sendMessage(op[10], 'Initialization failed')
+                        # else:
+                            # bot.sendMessage(op[10], 'Initialization failed')
                     else:
                         bot.acceptChatInvitation(op[10])
                         bot.sendMessage(op[10], 'No PERMISSION.')
