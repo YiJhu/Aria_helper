@@ -2,7 +2,10 @@
 
 Aria helper CHRLINE version.
 
-# use
+# Install
+1. [Python 3.x](python.org)
+  for windows u need install Vc++ build tools 2015 or the new ver
+2. [Rust](rust-lang.org)
 
 ```
 pip install -r requirements.txt
