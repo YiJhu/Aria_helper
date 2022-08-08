@@ -15,4 +15,4 @@ pip install -r requirements.txt
 
 # API Copyright
 
-CHRLINE is copyright by DeachSword
+[CHRLINE](https://github.com/DeachSword/CHRLINE) is copyright by DeachSword
