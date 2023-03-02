@@ -30,3 +30,4 @@ pip install -r requirements.txt
 ## Sponsor
 www.paypal.me/YiJhu486
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Z8Z5D0PMY)
