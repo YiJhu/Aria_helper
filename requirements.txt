@@ -1,1 +1,1 @@
-CHRLINE == 1.6.2
+CHRLINE == 2.5.1

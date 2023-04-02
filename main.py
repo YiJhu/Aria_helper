@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+'''
+    This is a main program in Aria helper CHRLINE Version.
+    Versoin: CHR_Aria 1.2
+    Auther: YiJhu (https://github.com/yijhu/)
+    Web: (https://profile.yijhu.xyz)
+    ------------------------------------------------------
+    Library: CHRLINE (ver: 2.5.1)
+'''
 from CHRLINE import *
 import time
 import timeit
@@ -7,12 +15,13 @@ import concurrent
 import base64
 
 bot = CHRLINE(authTokenOrEmail="Token or mail", password="Password",
-              device="DESKTOPWIN", os_name="Aria helper")
+              device="DESKTOPWIN", os_name="Aria helper", useThrift=False)
 
 Admin = ["Admin_MID"]  # Admin
 Owner = ["Owner_MID"]  # Owner
 
 rev = 0
+# rev = bot.getLastOpRevision()
 
 helplist = "#help\n#speed\n#time\n#me\n#mid\n#mid:@{byTag}\n#userinfo:@{byTag}\n#gid\n#getcontact:{mid}\n#tagcontact:@{byTag}\n#ginfo\n#gowner\n#url:{on/off}\n#regname:{new group name}\n#bye\n#kick:{mid}\n#mk:@{byTag}\n#cancel\n#data:{num}"
 
@@ -21,12 +30,13 @@ while True:
     for op in Ops:
         if op and 0 not in op and op[3] != 0:
             rev = max(rev, op[1])
+            # print('%s\n\n' % (op))
             if op[3] == 26:
                 msg = op[20]
                 if msg[15] == 0:
                     if msg[3] == 2:
                         if msg[1] in Owner or msg[1] in Admin:
-                            if msg[10] == '#help':
+                            if msg[10] == '#help':  # help commands
                                 with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
                                     help = str(helplist)
                                     if msg[1] in Owner:
@@ -34,21 +44,21 @@ while True:
                                             "\n#exec:{text}\n#rename:{text}\n#rebio:{text}\n#repic:{path}\n#Kickall")
                                     else:
                                         continue
-                                    executor.submit(bot.sendMessage(
-                                        msg[2], f"【HELP COMMAND】\n{help}"))
+                                    executor.submit(bot.replyMessage(
+                                        msg, f"【HELP COMMAND】\n{help}"))
 
                             if msg[10] == '#speed':  # speed test
                                 with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
                                     speed = timeit.timeit(
                                         '"-".join(str(n) for n in range(100))', number=10000)
-                                    executor.submit(bot.sendMessage(
-                                        msg[2], f"SpeedTest： {speed} s", relatedMessageId=msg[4]))
+                                    executor.submit(bot.replyMessage(
+                                        msg, f"SpeedTest： {speed} s"))
 
                             if msg[10] == '#time':  # get time
                                 with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
                                     stime = bot.getServerTime()
-                                    executor.submit(bot.sendMessage(msg[2],  "【Now Time (UTC+8)】\n" + time.strftime(
-                                        '%Y-%m-%d %I:%M:%S %p', time.localtime(stime/1000)), relatedMessageId=msg[4]))
+                                    executor.submit(bot.replyMessage(msg,  "【Now Time (UTC+8)】\n" + time.strftime(
+                                        '%Y-%m-%d %I:%M:%S %p', time.localtime(stime/1000))))
 
                             if msg[10] == '#me':  # get your contact
                                 with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
@@ -56,8 +66,7 @@ while True:
                                         msg[2], msg[1], "yijhu.xyz"))
 
                             if msg[10] == '#mid':  # get your LINE-legy mid
-                                bot.sendMessage(
-                                    msg[2], msg[1], relatedMessageId=msg[4])
+                                bot.replyMessage(msg, msg[1])
 
                             # get user LINE-legy mid via mentionees
                             if msg[10].startswith("#mid:"):
@@ -74,8 +83,7 @@ while True:
                                         n = bot.getContact(mlist)
                                         txt += f"{n[22]}\n"
                                         txt += f"{n[1]}\n"
-                                bot.sendMessage(
-                                    msg[2], txt, relatedMessageId=msg[4])
+                                bot.replyMessage(msg, txt)
                                 del mlists
 
                             # get user infomation via mentionees
@@ -91,21 +99,21 @@ while True:
                                     for mlist in mlists:
                                         concact = bot.getContact(mlist)
                                         try:
-                                            bot.sendMessage(msg[2], 'User Name:\n%s\nUser Mid:\n%s\nStatus Message:\n%s\nProfile Link:\n%s/%s' % (
-                                                concact[22], concact[1], concact[26], bot.LINE_PROFILE_CDN_DOMAIN, concact[24]), relatedMessageId=msg[4])
+                                            bot.replyMessage(msg, 'User Name:\n%s\nUser Mid:\n%s\nStatus Message:\n%s\nProfile Link:\n%s/%s' % (
+                                                concact[22], concact[1], concact[26], bot.LINE_PROFILE_CDN_DOMAIN, concact[24]))
                                         except:
-                                            bot.sendMessage(msg[2], 'User Name:\n%s\nUser Mid:\n%s\nStatus Message:\n%s\nProfile Link:\n%s/%s' % (
-                                                concact[22], concact[1], concact[26], bot.LINE_PROFILE_CDN_DOMAIN, 'None'), relatedMessageId=msg[4])
+                                            bot.replyMessage(msg, 'User Name:\n%s\nUser Mid:\n%s\nStatus Message:\n%s\nProfile Link:\n%s/%s' % (
+                                                concact[22], concact[1], concact[26], bot.LINE_PROFILE_CDN_DOMAIN, 'None'))
 
                             if msg[10] == '#gid':  # get chat room id
-                                bot.sendMessage(msg[2], msg[2])
+                                bot.replyMessage(msg, msg[2])
 
                             # get contact via LINE-legy mid
                             if msg[10].startswith("#getcontact:"):
                                 key = msg[10][12:]
                                 if len(key) <= 32:
-                                    bot.sendMessage(
-                                        msg[2], '【MID ERROR】\nCharacter is empty', relatedMessageId=msg[4])
+                                    bot.replyMessage(
+                                        msg, '【MID ERROR】\nCharacter is empty')
                                 else:
                                     try:
                                         xmid = bot.getContact(key)[2]
@@ -115,8 +123,8 @@ while True:
                                         except:
                                             pass
                                     except:
-                                        bot.sendMessage(
-                                            msg[2], '【MID ERROR】\nNo such user', relatedMessageId=msg[4])
+                                        bot.replyMessage(
+                                            msg, '【MID ERROR】\nNo such user')
 
                             # tagcontact: mentions
                             # get contact via mentions
@@ -135,56 +143,56 @@ while True:
                                 del mlists
 
                             if msg[10] == '#ginfo':  # get chat room infomation
-                                gid = bot.getGroup(msg[2])
+                                gid = bot.getChats([msg[2]])[1][0]
                                 g_info = "【Group Info】"
-                                g_info += "\n[Group Name]\n" + gid[10]
-                                g_info += "\n[Group Id]\n" + gid[1]
+                                g_info += "\n[Group Name]\n" + gid[6]
+                                g_info += "\n[Group Id]\n" + gid[2]
                                 try:
                                     g_info += "\n[Group Creator]\n" + \
-                                        gid[21][22]
+                                        bot.getContact(
+                                            gid[8][1][1])[22]
                                 except:
                                     g_info += "\n[Group Creator]\n" + \
-                                        gid[20][0][22] + " (inherit)"
+                                        bot.getContact(gid[8][1][4][0])[
+                                            22] + " (inherit)"
                                 try:
-                                    g_info += "\n[Group Profile]\n%s/%s" % (
-                                        bot.LINE_OBS_DOMAIN, gid[11])
+                                    g_info += "\n[Group Profile]\n%s%s" % (
+                                        bot.LINE_OBS_DOMAIN, gid[7])
                                 except:
                                     g_info += "\n[Group Profile]\n%s/%s" % (
                                         bot.LINE_OBS_DOMAIN, 'None')
                                 g_info += "\n[Created Time]\n" + time.strftime(
-                                    '%Y-%m-%d %I:%M:%S %p', time.localtime(gid[2]/1000))
-                                try:
-                                    g_info += "\n" + "-" * 40 .join(" \nMembers： ") + \
-                                        str(len(gid[20])) + \
-                                        "\nInvitees： " + str(len(gid[22]))
-                                except:
-                                    g_info += "\n" + "-" * 40 .join(" \nMembers： ") + \
-                                        str(len(gid[20])) + "\nInvitees： 0"
-                                if gid[12] is False:
+                                    '%Y-%m-%d %I:%M:%S %p', time.localtime(gid[3]/1000))
+                                g_info += "\n" + "-" * 40
+                                g_info += " \nMembers： " + \
+                                    str(len(gid[8][1][4])) + \
+                                    "\nInvitees： " + str(len(gid[8][1][5]))
+                                if gid[8][1][2] is False:
                                     g_info += "\nInvitation Url： Allowed."
                                 else:
                                     g_info += "\nInvitation Url： Blocked."
-                                bot.sendMessage(
-                                    msg[2], f'{g_info}', relatedMessageId=msg[4])
+                                bot.replyMessage(
+                                    msg, f'{g_info}')
 
                             if msg[10] == '#gowner':
-                                gid = bot.getGroup(msg[2])
-                                if 21 in gid:
+                                gid = bot.getChats([msg[2]])[1][0]
+                                try:
+                                    bot.getContact(gid[8][1][1])[22]
                                     bot.sendContact(
-                                        msg[2], gid[21][1], "yijhu.xyz")
-                                else:
-                                    bot.sendMessage(
-                                        msg[2], "The original group creator has deleted the account.\nThis is the inherited group creator!", relatedMessageId=msg[4])
+                                        msg[2], gid[8][1][1], "yijhu.xyz")
+                                except:
+                                    bot.replyMessage(
+                                        msg, "The original group creator has deleted the account.\nThis is the inherited group creator!")
                                     bot.sendContact(
-                                        msg[2], gid[20][0][1], "yijhu.xyz")
+                                        msg[2], gid[8][1][4][0], "yijhu.xyz")
 
                             if msg[10].startswith("#url:"):  # url:on / off
                                 key = msg[10][5:]
                                 if key.lower() == "on":
                                     bot.updateChatPreventedUrl(msg[2], False)
                                     uri = bot.reissueChatTicket(msg[2])
-                                    bot.sendMessage(
-                                        msg[2], f"https://line.me/R/ti/g/{uri[1]}", relatedMessageId=msg[4])
+                                    bot.replyMessage(
+                                        msg, f"https://line.me/R/ti/g/{uri[1]}")
                                 if key.lower() == "off":
                                     bot.reissueChatTicket(msg[2])
                                     bot.updateChatPreventedUrl(msg[2], True)
@@ -192,11 +200,11 @@ while True:
                             if msg[10].startswith("#regname:"):  # regname:str
                                 key = msg[10][9:]
                                 bot.updateChatName(msg[2], key)
-                                bot.sendMessage(
-                                    msg[2], f'【Re GROUP NAME】\n{key}', relatedMessageId=msg[4])
+                                bot.replyMessage(
+                                    msg, f'【Re GROUP NAME】\n{key}')
 
                             if msg[10] == '#bye':  # quit bot
-                                bot.sendMessage(msg[2], "BYE~")
+                                bot.replyMessage(msg, "BYE~")
                                 bot.deleteSelfFromChat(msg[2])
 
                             if msg[10].startswith("#kick:"):  # kick:mid
@@ -209,8 +217,8 @@ while True:
                                             continue
                                         bot.deleteOtherFromChat(msg[2], kmid)
                                         xname = bot.getContact(f'{kmid}')
-                                        bot.sendMessage(
-                                            msg[2], '【Kick OUT】\n' + xname[22], relatedMessageId=msg[4])
+                                        bot.replyMessage(
+                                            msg, '【Kick OUT】\n' + xname[22])
                                     except:
                                         pass
 
@@ -232,34 +240,36 @@ while True:
                                                         bot.deleteOtherFromChat(msg[2], kmid))
                                                     txt = ""
                                                     txt += mid[22]
-                                        bot.sendMessage(
-                                            msg[2], f'【Kick OUT】\n{txt}', relatedMessageId=msg[4])
+                                        bot.replyMessage(
+                                            msg, f'【Kick OUT】\n{txt}')
                                 del klist
 
                             if msg[10] == '#cancel':  # cancel all invitation
-                                if 22 in bot.getGroup(msg[2]):
-                                    Invitees = bot.getGroup(msg[2])[22]
+                                try:
+                                    Invitees = bot.getChats(
+                                        [msg[2]])[1][0][8][1][5]
                                     # The recommended value of max_workers for this function is 3
                                     with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
                                         for member in Invitees:
                                             start = time.time()
                                             executor.submit(
-                                                bot.cancelChatInvitation(msg[2], member[1]))
+                                                bot.cancelChatInvitation(msg[2], member))
                                             time.sleep(0.8)
                                         end = time.time()
-                                    bot.sendMessage(msg[2], (end - start))
-                                else:
-                                    bot.sendMessage(msg[2], "NO Invitation")
+                                    bot.replyMessage(
+                                        msg, (end - start))
+                                except:
+                                    bot.replyMessage(
+                                        msg, "NO Invitation")
 
                             if msg[10].startswith("#data:"):  # data:num
                                 num = int(msg[10][6:])+1
                                 try:
                                     data = bot.getRecentMessagesV2(msg[2])[
                                         num-1]
-                                    bot.sendMessage(msg[2], f'{data}')
+                                    bot.replyMessage(msg, f'{data}')
                                 except Exception as e:
-                                    bot.sendMessage(
-                                        msg[2], f'{e}', relatedMessageId=msg[4])
+                                    bot.replyMessage(msg, f'{e}')
                         if msg[1] in Owner:
                             '''for owner'''
                             if msg[10].startswith("#exec:"):  # cmd:command
@@ -267,17 +277,17 @@ while True:
                                 try:
                                     exec(command)
                                 except Exception as e:
-                                    bot.sendMessage(msg[2], f'{e}')
+                                    bot.replyMessage(msg, f'{e}')
 
                             if msg[10].startswith("#rename:"):  # rename:str
                                 key = msg[10][8:]
                                 if len(key) == 0:
-                                    bot.sendMessage(
-                                        msg[2], '【Re NAME ERROR】\nCharacter is empty')
+                                    bot.replyMessage(
+                                        msg, '【Re NAME ERROR】\nCharacter is empty')
                                 else:
                                     bot.updateProfileAttribute(2, key)
-                                    bot.sendMessage(
-                                        msg[2], f'【Re NAME】\n{key}')
+                                    bot.replyMessage(
+                                        msg, f'【Re NAME】\n{key}')
 
                             if msg[10] == '#repic:':  # repic: file_Path
                                 key = msg[10][7:]
@@ -286,19 +296,21 @@ while True:
                             if msg[10].startswith("#rebio:"):  # rebio:str
                                 bio = msg[10][7:]
                                 bot.updateProfileAttribute(16, bio)
-                                bot.sendMessage(msg[2], f'【Re BIO】\n{bio}')
+                                bot.replyMessage(
+                                    msg[2], f'【Re BIO】\n{bio}')
 
                             if msg[10] == '#Kickall':  # remove people
-                                klist = bot.getGroup(msg[2])[20]
+                                klist = bot.getChats([msg[2]])[1][0][8][1][4]
                                 # The recommended value of max_workers for this function is 15
                                 with concurrent.futures.ThreadPoolExecutor(max_workers=15) as executor:
                                     start = time.time()
                                     for kmid in klist:
-                                        if not kmid[1] in Owner or not kmid[1] in bot.profile[1]:
-                                            executor.submit(
-                                                bot.deleteOtherFromChat(msg[2], kmid[1]))
+                                        if kmid in Owner or kmid in bot.profile[1]:
+                                            continue
+                                        executor.submit(
+                                            bot.deleteOtherFromChat(msg[2], kmid))
                                     end = time.time()
-                                bot.sendMessage(msg[2], (end - start))
+                                bot.replyMessage(msg, (end - start))
 
                 # call
                 # Not every device is supported. exg:chrome and more...
@@ -306,12 +318,12 @@ while True:
                     if msg[3] == 2:  # for chat room
                         contentMetadata = msg[18]
                         stype = [{"r": "Room ", "c": "Group "}, {
-                            'AUDIO': "Voice Call", 'VIDEO': "Video Call", "LIVE": "Live Video"}]  # type
-                        if contentMetadata['GC_MEDIA_TYPE'] in ["AUDIO", "VIDEO", "LIVE"]:
+                            'AUDIO': "Voice Call", 'VIDEO': "Video Call"}]  # type
+                        if contentMetadata['GC_MEDIA_TYPE'] in ["AUDIO", "VIDEO"]:
                             type_voices = stype[0][contentMetadata['GC_CHAT_MID']
                                                    [:1]]+stype[1][contentMetadata['GC_MEDIA_TYPE']]
                             if contentMetadata['GC_EVT_TYPE'] == 'S':  # start
-                                bot.sendMessage(msg[2], "【" + type_voices + " Start】\nCorrespondent：" + bot.getContact(
+                                bot.sendCompactMessage(msg[2], "【" + type_voices + " Start】\nCorrespondent：" + bot.getContact(
                                     msg[1])[22] + "\n" + time.strftime('%H:%M:%S'))
                             if contentMetadata['GC_EVT_TYPE'] == 'E':  # end
                                 pass
@@ -323,10 +335,10 @@ while True:
                         with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
                             someone = bot.getContact(msg[18]["mid"])
                             try:
-                                executor.submit(bot.sendMessage(msg[2], 'User Name:\n%s\nUser Mid:\n%s\nStatus Message:\n(Only show 100 words!)\n%s\nProfile Link:\n%s/%s' % (
+                                executor.submit(bot.sendCompactMessage(msg[2], 'User Name:\n%s\nUser Mid:\n%s\nStatus Message:\n(Only show 100 words!)\n%s\nProfile Link:\n%s/%s' % (
                                     someone[22], someone[1], someone[26][:100], bot.LINE_PROFILE_CDN_DOMAIN, someone[24])))
                             except:
-                                executor.submit(bot.sendMessage(msg[2], 'User Name:\n%s\nUser Mid:\n%s\nStatus Message:\n(Only show 100 words!)\n%s\nProfile Link:\n%s/%s' % (
+                                executor.submit(bot.sendCompactMessage(msg[2], 'User Name:\n%s\nUser Mid:\n%s\nStatus Message:\n(Only show 100 words!)\n%s\nProfile Link:\n%s/%s' % (
                                     someone[22], someone[1], someone[26][:100], bot.LINE_PROFILE_CDN_DOMAIN, 'None')))
                     if msg[3] == 0:  # for chat
                         someone = bot.getContact(msg[18]["mid"])
@@ -379,7 +391,7 @@ while True:
                         if 'FILE_EXPIRE_TIMESTAMP' in contentMetadata:
                             ftxt += "\n[File Expire time]\n%s" % (time.strftime(
                                 '%Y-%m-%d %I:%M:%S %p', time.localtime(int(contentMetadata['FILE_EXPIRE_TIMESTAMP'])/1000)))
-                        bot.sendMessage(msg[2], ftxt)
+                        bot.sendCompactMessage(msg[2], ftxt)
 
                 if msg[15] == 16:
                     if msg[3] == 2:
@@ -406,7 +418,7 @@ while True:
                                     contentMetadata['location'])
                             g_post += "\n[Post Url]\n%s" % (
                                 contentMetadata['postEndUrl'])
-                            bot.sendMessage(msg[2], g_post)
+                            bot.replyMessage(msg, g_post)
 
                         if contentMetadata['serviceType'] == 'MH':  # personal post
                             p_post = "【Post Info】"
@@ -435,7 +447,7 @@ while True:
                                     contentMetadata["location"]
                             p_post += "\n[Post Url]\n" + \
                                 contentMetadata["postEndUrl"]
-                            bot.sendMessage(msg[2], p_post)
+                            bot.sendCompactMessage(msg[2], p_post)
 
                         if contentMetadata['serviceType'] == 'AB':  # album
                             if contentMetadata['locKey'] == 'BA':  # creat album
@@ -450,7 +462,7 @@ while True:
                                         int(contentMetadata['mediaCount'])+1)
                                 album += "\n[Album Url]\n%s" % (
                                     contentMetadata['postEndUrl'].replace("line://", "https://line.me/R/"))
-                                bot.sendMessage(msg[2], album)
+                                bot.sendCompactMessage(msg[2], album)
                             if contentMetadata['locKey'] == 'BT':  # add photos
                                 album = "【Group Album】"
                                 album += "\n[Photo Sender]\n%s" % (
@@ -463,7 +475,7 @@ while True:
                                         int(contentMetadata['mediaCount'])+1)
                                 album += "\n[Album Url]\n%s" % (
                                     contentMetadata['postEndUrl'].replace("line://", "https://line.me/R/"))
-                                bot.sendMessage(msg[2], album)
+                                bot.sendCompactMessage(msg[2], album)
 
                 if msg[15] == 18:  # del Album or photo or inv_someone or cancel_someone
                     pass
@@ -472,9 +484,9 @@ while True:
                 try:
                     bot.acceptChatInvitation(op[10])
                     if op[11] in Admin or op[11] in Owner:
-                        bot.sendMessage(op[10], 'THANKS FOR USEING.')
+                        bot.sendCompactMessage(op[10], 'THANKS FOR USEING.')
                     else:
-                        bot.sendMessage(op[10], 'No PERMISSION.')
+                        bot.sendCompactMessage(op[10], 'No PERMISSION.')
                         bot.deleteSelfFromChat(op[10])
                         # bot.rejectChatInvitation(op[10])
                 except:
