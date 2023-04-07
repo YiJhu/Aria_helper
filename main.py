@@ -484,7 +484,7 @@ while True:
                 try:
                     bot.acceptChatInvitation(op[10])
                     if op[11] in Admin or op[11] in Owner:
-                        bot.sendCompactMessage(op[10], 'THANKS FOR USEING.')
+                        bot.sendCompactMessage(op[10], 'THANKS FOR USING.')
                     else:
                         bot.sendCompactMessage(op[10], 'No PERMISSION.')
                         bot.deleteSelfFromChat(op[10])
