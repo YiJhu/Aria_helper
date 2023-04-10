@@ -429,10 +429,8 @@ while True:
                                 p_post += "\n[Post Preview]\n%s" % (
                                     contentMetadata['text'])
                             if 'mediaOid' in contentMetadata:
-                                stra = contentMetadata['mediaOid'].replace(
-                                    "svc=", "/")
-                                strb = stra.replace("|sid=", "/")
-                                mediaOid = strb.replace("|oid=", "/")
+                                mediaOid = contentMetadata['mediaOid'].replace(
+                                    "svc=", "/").replace("|sid=", "/").replace("|oid=", "/")
                                 if contentMetadata['mediaType'] == 'I':
                                     p_post += "\n[Media Url]\n%s/r%s" % (
                                         bot.LINE_OBS_DOMAIN, mediaOid)
