@@ -15,7 +15,7 @@ pip install -r requirements.txt
 
 # demonstration
 
-![image](https://github.com/YiJhu/Aria_helper/blob/main/docs/demon.png)
+[![image](https://github.com/YiJhu/Aria_helper/blob/main/docs/demon.png)](https://line.me/R/ti/p/g3c8dOwDFb)
 [![Add](https://github.com/YiJhu/Aria_helper/blob/main/docs/add.png)](https://line.me/R/ti/p/g3c8dOwDFb)
 
 # API Copyright

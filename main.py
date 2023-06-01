@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 '''
     This is a main program in Aria helper CHRLINE Version.
-    Versoin: CHR_Aria 1.2
+    Versoin: CHR_Aria 1.2.1
     Auther: YiJhu (https://github.com/yijhu/)
     Web: (https://profile.yijhu.xyz)
     ------------------------------------------------------
-    Library: CHRLINE (ver: 2.5.1)
+    Library: CHRLINE (ver: 2.5.14)
 '''
 from CHRLINE import *
 import time
@@ -23,7 +23,7 @@ Owner = ["Owner_MID"]  # Owner
 rev = 0
 # rev = bot.getLastOpRevision()
 
-helplist = "#help\n#speed\n#time\n#me\n#mid\n#mid:@{byTag}\n#userinfo:@{byTag}\n#gid\n#getcontact:{mid}\n#tagcontact:@{byTag}\n#ginfo\n#gowner\n#url:{on/off}\n#regname:{new group name}\n#bye\n#kick:{mid}\n#mk:@{byTag}\n#cancel\n#data:{num}"
+helplist = "/help\n/speed\n/time\n/me\n/mid\n/mid:@{byTag}\n/userinfo:@{byTag}\n/gid\n/getcontact:{mid}\n/tagcontact:@{byTag}\n/ginfo\n/gowner\n#url:{on/off}\n/regname:{new group name}\n/bye\n/kick:{mid}\n/mk:@{byTag}\n/cancel\n/data:{num}"
 
 while True:
     Ops = bot.fetchOps(rev)
@@ -35,41 +35,41 @@ while True:
                 msg = op[20]
                 if msg[15] == 0:
                     if msg[3] == 2:
-                        if msg[1] in Owner or msg[1] in Admin:
-                            if msg[10] == '#help':  # help commands
+                        if msg[1] in (Owner, Admin):
+                            if msg[10] == '/help':  # help commands
                                 with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
                                     help = str(helplist)
                                     if msg[1] in Owner:
                                         help += str(
-                                            "\n#exec:{text}\n#rename:{text}\n#rebio:{text}\n#repic:{path}\n#Kickall")
+                                            "\n/exec:{text}\n/rename:{text}\n/rebio:{text}\n/repic:{path}\n/Kickall")
                                     else:
                                         continue
                                     executor.submit(bot.replyMessage(
                                         msg, f"【HELP COMMAND】\n{help}"))
 
-                            if msg[10] == '#speed':  # speed test
+                            if msg[10] == '/speed':  # speed test
                                 with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
                                     speed = timeit.timeit(
                                         '"-".join(str(n) for n in range(100))', number=10000)
                                     executor.submit(bot.replyMessage(
                                         msg, f"SpeedTest： {speed} s"))
 
-                            if msg[10] == '#time':  # get time
+                            if msg[10] == '/time':  # get time
                                 with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
                                     stime = bot.getServerTime()
                                     executor.submit(bot.replyMessage(msg,  "【Now Time (UTC+8)】\n" + time.strftime(
                                         '%Y-%m-%d %I:%M:%S %p', time.localtime(stime/1000))))
 
-                            if msg[10] == '#me':  # get your contact
+                            if msg[10] == '/me':  # get your contact
                                 with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
                                     executor.submit(bot.sendContact(
                                         msg[2], msg[1], "yijhu.xyz"))
 
-                            if msg[10] == '#mid':  # get your LINE-legy mid
+                            if msg[10] == '/mid':  # get your LINE-legy mid
                                 bot.replyMessage(msg, msg[1])
 
                             # get user LINE-legy mid via mentionees
-                            if msg[10].startswith("#mid:"):
+                            if msg[10].startswith("/mid:"):
                                 mlists = []
                                 if 'MENTION' in msg[18]:
                                     key = eval(msg[18]["MENTION"])
@@ -87,7 +87,7 @@ while True:
                                 del mlists
 
                             # get user infomation via mentionees
-                            if msg[10].startswith("#userinfo:"):
+                            if msg[10].startswith("/userinfo:"):
                                 mlists = []
                                 if 'MENTION' in msg[18]:
                                     key = eval(msg[18]["MENTION"])
@@ -98,18 +98,13 @@ while True:
                                             mlists.append(mid[1])
                                     for mlist in mlists:
                                         concact = bot.getContact(mlist)
-                                        try:
-                                            bot.replyMessage(msg, 'User Name:\n%s\nUser Mid:\n%s\nStatus Message:\n%s\nProfile Link:\n%s/%s' % (
-                                                concact[22], concact[1], concact[26], bot.LINE_PROFILE_CDN_DOMAIN, concact[24]))
-                                        except:
-                                            bot.replyMessage(msg, 'User Name:\n%s\nUser Mid:\n%s\nStatus Message:\n%s\nProfile Link:\n%s/%s' % (
-                                                concact[22], concact[1], concact[26], bot.LINE_PROFILE_CDN_DOMAIN, 'None'))
+                                        bot.replyMessage(msg, f'User Name:\n{concact[22]}\nUser Mid:\n{concact[1]}\nStatus Message:\n{concact[26]}\nProfile Link:\n{bot.LINE_PROFILE_CDN_DOMAIN}/{concact[24] if concact[24] else "None"}')
 
-                            if msg[10] == '#gid':  # get chat room id
+                            if msg[10] == '/gid':  # get chat room id
                                 bot.replyMessage(msg, msg[2])
 
                             # get contact via LINE-legy mid
-                            if msg[10].startswith("#getcontact:"):
+                            if msg[10].startswith("/getcontact:"):
                                 key = msg[10][12:]
                                 if len(key) <= 32:
                                     bot.replyMessage(
@@ -128,7 +123,7 @@ while True:
 
                             # tagcontact: mentions
                             # get contact via mentions
-                            if msg[10].startswith("#tagcontact:"):
+                            if msg[10].startswith("/tagcontact:"):
                                 mlists = []
                                 if 'MENTION' in msg[18]:
                                     key = eval(msg[18]["MENTION"])
@@ -142,7 +137,7 @@ while True:
                                             msg[2], mlist, "yijhu.xyz")
                                 del mlists
 
-                            if msg[10] == '#ginfo':  # get chat room infomation
+                            if msg[10] == '/ginfo':  # get chat room infomation
                                 gid = bot.getChats([msg[2]])[1][0]
                                 g_info = "【Group Info】"
                                 g_info += "\n[Group Name]\n" + gid[6]
@@ -155,14 +150,7 @@ while True:
                                     g_info += "\n[Group Creator]\n" + \
                                         bot.getContact(gid[8][1][4][0])[
                                             22] + " (inherit)"
-                                try:
-                                    g_info += "\n[Group Profile]\n%s%s" % (
-                                        bot.LINE_OBS_DOMAIN, gid[7])
-                                except:
-                                    g_info += "\n[Group Profile]\n%s/%s" % (
-                                        bot.LINE_OBS_DOMAIN, 'None')
-                                g_info += "\n[Created Time]\n" + time.strftime(
-                                    '%Y-%m-%d %I:%M:%S %p', time.localtime(gid[3]/1000))
+                                g_info += "\n[Group Profile]\n%s%s" % (bot.LINE_OBS_DOMAIN, gid[7] if gid[7] else 'None')
                                 g_info += "\n" + "-" * 40
                                 g_info += " \nMembers： " + \
                                     str(len(gid[8][1][4])) + \
@@ -174,7 +162,7 @@ while True:
                                 bot.replyMessage(
                                     msg, f'{g_info}')
 
-                            if msg[10] == '#gowner':
+                            if msg[10] == '/gowner':
                                 gid = bot.getChats([msg[2]])[1][0]
                                 try:
                                     bot.getContact(gid[8][1][1])[22]
@@ -186,7 +174,7 @@ while True:
                                     bot.sendContact(
                                         msg[2], gid[8][1][4][0], "yijhu.xyz")
 
-                            if msg[10].startswith("#url:"):  # url:on / off
+                            if msg[10].startswith("/url:"):  # url:on / off
                                 key = msg[10][5:]
                                 if key.lower() == "on":
                                     bot.updateChatPreventedUrl(msg[2], False)
@@ -197,23 +185,23 @@ while True:
                                     bot.reissueChatTicket(msg[2])
                                     bot.updateChatPreventedUrl(msg[2], True)
 
-                            if msg[10].startswith("#regname:"):  # regname:str
+                            if msg[10].startswith("/regname:"):  # regname:str
                                 key = msg[10][9:]
                                 bot.updateChatName(msg[2], key)
                                 bot.replyMessage(
                                     msg, f'【Re GROUP NAME】\n{key}')
 
-                            if msg[10] == '#bye':  # quit bot
+                            if msg[10] == '/bye':  # quit bot
                                 bot.replyMessage(msg, "BYE~")
                                 bot.deleteSelfFromChat(msg[2])
 
-                            if msg[10].startswith("#kick:"):  # kick:mid
+                            if msg[10].startswith("/kick:"):  # kick:mid
                                 kmid = msg[10][6:]
                                 if len(kmid) <= 32:
                                     pass
                                 else:
                                     try:
-                                        if bot.profile[1] == kmid:
+                                        if bot.mid == kmid:
                                             continue
                                         bot.deleteOtherFromChat(msg[2], kmid)
                                         xname = bot.getContact(f'{kmid}')
@@ -222,14 +210,14 @@ while True:
                                     except:
                                         pass
 
-                            if msg[10].startswith("#mk:"):  # mk:mentions
+                            if msg[10].startswith("/mk:"):  # mk:mentions
                                 klist = []
                                 if 'MENTION' in msg[18]:
                                     key = eval(msg[18]["MENTION"])
                                     tags = key["MENTIONEES"]
                                     for tag in tags:
                                         mid = bot.getContact(tag['M'])
-                                        if bot.profile[1] in mid[1]:
+                                        if bot.mid in mid[1]:
                                             continue
                                         if mid[1] not in klist:
                                             klist.append(mid[1])
@@ -244,7 +232,7 @@ while True:
                                             msg, f'【Kick OUT】\n{txt}')
                                 del klist
 
-                            if msg[10] == '#cancel':  # cancel all invitation
+                            if msg[10] == '/cancel':  # cancel all invitation
                                 try:
                                     Invitees = bot.getChats(
                                         [msg[2]])[1][0][8][1][5]
@@ -262,7 +250,7 @@ while True:
                                     bot.replyMessage(
                                         msg, "NO Invitation")
 
-                            if msg[10].startswith("#data:"):  # data:num
+                            if msg[10].startswith("/data:"):  # data:num
                                 num = int(msg[10][6:])+1
                                 try:
                                     data = bot.getRecentMessagesV2(msg[2])[
@@ -272,14 +260,14 @@ while True:
                                     bot.replyMessage(msg, f'{e}')
                         if msg[1] in Owner:
                             '''for owner'''
-                            if msg[10].startswith("#exec:"):  # cmd:command
+                            if msg[10].startswith("/exec:"):  # cmd:command
                                 command = msg[10][6:]
                                 try:
                                     exec(command)
                                 except Exception as e:
                                     bot.replyMessage(msg, f'{e}')
 
-                            if msg[10].startswith("#rename:"):  # rename:str
+                            if msg[10].startswith("/rename:"):  # rename:str
                                 key = msg[10][8:]
                                 if len(key) == 0:
                                     bot.replyMessage(
@@ -289,23 +277,23 @@ while True:
                                     bot.replyMessage(
                                         msg, f'【Re NAME】\n{key}')
 
-                            if msg[10] == '#repic:':  # repic: file_Path
+                            if msg[10] == '/repic:':  # repic: file_Path
                                 key = msg[10][7:]
                                 bot.updateProfileImage(key)
 
-                            if msg[10].startswith("#rebio:"):  # rebio:str
+                            if msg[10].startswith("/rebio:"):  # rebio:str
                                 bio = msg[10][7:]
                                 bot.updateProfileAttribute(16, bio)
                                 bot.replyMessage(
                                     msg[2], f'【Re BIO】\n{bio}')
 
-                            if msg[10] == '#Kickall':  # remove people
+                            if msg[10] == '/Kickall':  # remove people
                                 klist = bot.getChats([msg[2]])[1][0][8][1][4]
                                 # The recommended value of max_workers for this function is 15
                                 with concurrent.futures.ThreadPoolExecutor(max_workers=15) as executor:
                                     start = time.time()
                                     for kmid in klist:
-                                        if kmid in Owner or kmid in bot.profile[1]:
+                                        if kmid in (Owner, bot.mid):
                                             continue
                                         executor.submit(
                                             bot.deleteOtherFromChat(msg[2], kmid))
@@ -334,15 +322,11 @@ while True:
                         # The limit value of max_workers is 32
                         with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
                             someone = bot.getContact(msg[18]["mid"])
-                            try:
-                                executor.submit(bot.sendCompactMessage(msg[2], 'User Name:\n%s\nUser Mid:\n%s\nStatus Message:\n(Only show 100 words!)\n%s\nProfile Link:\n%s/%s' % (
-                                    someone[22], someone[1], someone[26][:100], bot.LINE_PROFILE_CDN_DOMAIN, someone[24])))
-                            except:
-                                executor.submit(bot.sendCompactMessage(msg[2], 'User Name:\n%s\nUser Mid:\n%s\nStatus Message:\n(Only show 100 words!)\n%s\nProfile Link:\n%s/%s' % (
-                                    someone[22], someone[1], someone[26][:100], bot.LINE_PROFILE_CDN_DOMAIN, 'None')))
+                            executor.submit(bot.sendCompactMessage(msg[2], 'User Name:\n%s\nUser Mid:\n%s\nStatus Message:\n(Only show 100 words!)\n%s\nProfile Link:\n%s/%s' % (someone[22], someone[1], someone[26][:100], bot.LINE_PROFILE_CDN_DOMAIN, someone[24] if someone[24] else "None")))
+
                     if msg[3] == 0:  # for chat
                         someone = bot.getContact(msg[18]["mid"])
-                        bot.sendChatChecked(msg[1], msg[4])
+                        bot.sendChatChecked(msg[1], msg[4]) # sendChatChecked
                         selfKeyData = bot.getE2EESelfKeyData(bot.mid)
                         senderKeyId = selfKeyData['keyId']
                         private_key = base64.b64decode(selfKeyData['privKey'])
@@ -353,20 +337,9 @@ while True:
                         keyData = bot.generateSharedSecret(
                             bytes(private_key), receiver_key_data[2][4])
                         specVersion = receiver_key_data[3]
-                        try:
-                            text = 'User Name:\n%s\nUser Mid:\n%s\nStatus Message:\n(Only show 100 words!)\n%s\nProfile Link:\n%s/%s' % (
-                                someone[22], someone[1], someone[26][:100], bot.LINE_PROFILE_CDN_DOMAIN, someone[24])
-                            encData = bot.encryptE2EETextMessage(
-                                senderKeyId, receiverKeyId, keyData, specVersion, text, msg[1], bot.mid)
-                            bot.sendMessageWithChunks(
-                                msg[1], encData, 0, {'e2eeVersion': '2', 'contentType': '0'})
-                        except:
-                            text = 'User Name:\n%s\nUser Mid:\n%s\nStatus Message:\n(Only show 100 words!)\n%s\nProfile Link:\n%s/%s' % (
-                                someone[22], someone[1], someone[26][:100], bot.LINE_PROFILE_CDN_DOMAIN, 'None')
-                            encData = bot.encryptE2EETextMessage(
-                                senderKeyId, receiverKeyId, keyData, specVersion, text, msg[1], bot.mid)
-                            bot.sendMessageWithChunks(
-                                msg[1], encData, 0, {'e2eeVersion': '2', 'contentType': '0'})
+                        text = 'User Name:\n%s\nUser Mid:\n%s\nStatus Message:\n(Only show 100 words!)\n%s\nProfile Link:\n%s/%s' % (someone[22], someone[1], someone[26][:100], bot.LINE_PROFILE_CDN_DOMAIN, someone[24] if someone[24] else "None")
+                        encData = bot.encryptE2EETextMessage(senderKeyId, receiverKeyId, keyData, specVersion, text, msg[1], bot.mid)
+                        bot.sendMessageWithChunks(msg[1], encData, 0, {'e2eeVersion': '2', 'contentType': '0'})
 
                 if msg[15] == 14:  # file infomation
                     if msg[3] == 2:
@@ -460,7 +433,7 @@ while True:
                                         int(contentMetadata['mediaCount'])+1)
                                 album += "\n[Album Url]\n%s" % (
                                     contentMetadata['postEndUrl'].replace("line://", "https://line.me/R/"))
-                                bot.sendCompactMessage(msg[2], album)
+                                bot.replyMessage(msg, album)
                             if contentMetadata['locKey'] == 'BT':  # add photos
                                 album = "【Group Album】"
                                 album += "\n[Photo Sender]\n%s" % (
@@ -473,15 +446,15 @@ while True:
                                         int(contentMetadata['mediaCount'])+1)
                                 album += "\n[Album Url]\n%s" % (
                                     contentMetadata['postEndUrl'].replace("line://", "https://line.me/R/"))
-                                bot.sendCompactMessage(msg[2], album)
+                                bot.replyMessage(msg, album)
 
                 if msg[15] == 18:  # del Album or photo or inv_someone or cancel_someone
                     pass
 
-            if op[3] == 124 and bot.profile[1] in op[12]:
+            if op[3] == 124 and bot.mid in op[12]:
                 try:
                     bot.acceptChatInvitation(op[10])
-                    if op[11] in Admin or op[11] in Owner:
+                    if op[11] in (Admin, Owner):
                         bot.sendCompactMessage(op[10], 'THANKS FOR USING.')
                     else:
                         bot.sendCompactMessage(op[10], 'No PERMISSION.')
