@@ -23,7 +23,7 @@ Owner = ["Owner_MID"]  # Owner
 rev = 0
 # rev = bot.getLastOpRevision()
 
-helplist = "/help\n/speed\n/time\n/me\n/mid\n/mid:@{byTag}\n/userinfo:@{byTag}\n/gid\n/getcontact:{mid}\n/tagcontact:@{byTag}\n/ginfo\n/gowner\n#url:{on/off}\n/regname:{new group name}\n/bye\n/kick:{mid}\n/mk:@{byTag}\n/cancel\n/data:{num}"
+helplist = "/help\n/speed\n/time\n/me\n/mid\n/mid:@{byTag}\n/userinfo:@{byTag}\n/gid\n/getcontact:{mid}\n/tagcontact:@{byTag}\n/ginfo\n/gowner\n/url:{on/off}\n/regname:{new group name}\n/bye\n/kick:{mid}\n/mk:@{byTag}\n/cancel\n/data:{num}"
 
 while True:
     Ops = bot.fetchOps(rev)
