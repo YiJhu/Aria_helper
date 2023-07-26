@@ -33,8 +33,8 @@ You can also use the demo bot directly
 
 [PayPal](www.paypal.me/YiJhu486/)
 
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Z8Z5D0PMY)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Z8Z5D0PMY/)
 
-[ECPay / 綠界科技](https://payment.ecpay.com.tw/Broadcaster/Donate/84BC907808572266E03FD0FCE2A26318)
+[ECPay / 綠界科技](https://payment.ecpay.com.tw/Broadcaster/Donate/84BC907808572266E03FD0FCE2A26318/)
 
-
+[街口支付](https://www.jkopay.com/transfer?j=Transfer:908589779/)
