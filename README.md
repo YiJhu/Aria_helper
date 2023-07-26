@@ -30,6 +30,11 @@ You can also use the demo bot directly
 
 
 ## Sponsor
-www.paypal.me/YiJhu486
+
+[PayPal](www.paypal.me/YiJhu486/)
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Z8Z5D0PMY)
+
+[ECPay / 綠界科技](https://payment.ecpay.com.tw/Broadcaster/Donate/84BC907808572266E03FD0FCE2A26318)
+
+
