@@ -465,7 +465,7 @@ while True:
                         pass
 
                 except Exception as e:
-                    bot.log(f'Eeceive Message Error: {e.message}')
+                    bot.log(f'Receive Message Error: {e.message}')
 
             if op[3] == 124 and bot.mid in op[12]:  # for notification invite to chat
                 try:
