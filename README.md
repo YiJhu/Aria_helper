@@ -6,8 +6,16 @@ Aria helper CHRLINE version.
 
 # Install
 1. [Python 3.x](https://python.org)
-2. for windows u need install [VC++ build tools](https://visualstudio.microsoft.com/downloads) 2015 or Latest Version
+2. for windows you need install [VC++ build tools](https://visualstudio.microsoft.com/downloads) 2015 or Latest Version
 3. [Rust](https://rust-lang.org)
+
+## Install submodules
+
+```git
+git clone --recurse-submodules -j8 https://github.com/YiJhu/Aria_helper.git
+```
+
+or 
 
 ```python
 pip install -r requirements.txt
@@ -33,6 +41,6 @@ You can also use the demo bot directly
 
 [PayPal](www.paypal.me/YiJhu486)
 
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Z8Z5D0PMY)
-
 [街口支付](https://www.jkopay.com/transfer?j=Transfer:908589779)
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Z8Z5D0PMY)
