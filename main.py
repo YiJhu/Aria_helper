@@ -8,7 +8,7 @@
     ------------------------------------------------------
     Library: CHRLINE (ver: 2.5.24)
 '''
-from .CHRLINE.CHRLINE import *
+from CHRLINE import CHRLINE
 import re
 import time
 import timeit
