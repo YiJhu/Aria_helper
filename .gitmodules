@@ -1,0 +1,3 @@
+[submodule "CHRLINE"]
+	path = CHRLINE
+	url = https://github.com/DeachSword/CHRLINE.git
