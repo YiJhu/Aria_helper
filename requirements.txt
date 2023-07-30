@@ -1,1 +1,1 @@
-CHRLINE == 2.5.14
+CHRLINE >= 2.5.14
