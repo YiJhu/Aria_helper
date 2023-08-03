@@ -44,3 +44,6 @@ You can also use the demo bot directly
 [街口支付](https://www.jkopay.com/transfer?j=Transfer:908589779)
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Z8Z5D0PMY)
+
+<script src="https://liberapay.com/LH/widgets/button.js"></script>
+<noscript><a href="https://liberapay.com/LH/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
