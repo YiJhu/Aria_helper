@@ -1,7 +1,7 @@
 
 
   <h1>Aria_helper</h1>
-  <p>Aria helper is a Python project for the CHRLINE version, providing assistance with CHRLINE integration. This README
+  <p>Aria helper is a Python project for the CHRLINE version. This README
     file serves as documentation for the project, providing information on installation, usage, and how to contribute to
     the project.</p>
 
