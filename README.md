@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html>
 
-<head>
-  <title>Aria_helper</title>
-</head>
-
-<body>
 
   <h1>Aria_helper</h1>
   <p>Aria helper is a Python project for the CHRLINE version, providing assistance with CHRLINE integration. This README
@@ -72,7 +65,3 @@
   <h2 id="donations">Donations</h2>
   <p>If you wish to make a cryptocurrency donation, you can send USDT (Torn/TRC20) to the following address:</p>
   <pre>TAWJus92Crqdnm8MVw2HmoNEg4wq9WPDFH</pre>
-
-</body>
-
-</html>
