@@ -1,53 +1,78 @@
-# Aria_helper
+<!DOCTYPE html>
+<html>
 
-Aria helper CHRLINE version.
+<head>
+  <title>Aria_helper</title>
+</head>
 
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FYiJhu%2FAria_helper.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FYiJhu%2FAria_helper?ref=badge_shield)
+<body>
 
-# Install
-1. [Python 3.x](https://python.org)
-2. for windows you need install [VC++ build tools](https://visualstudio.microsoft.com/downloads) 2015 or Latest Version
-3. [Rust](https://rust-lang.org)
+  <h1>Aria_helper</h1>
+  <p>Aria helper is a Python project for the CHRLINE version, providing assistance with CHRLINE integration. This README
+    file serves as documentation for the project, providing information on installation, usage, and how to contribute to
+    the project.</p>
 
-## Install submodules
+  <h2>Table of Contents</h2>
+  <ul>
+    <li><a href="#install">Install</a></li>
+    <li><a href="#install-submodules">Install submodules</a></li>
+    <li><a href="#demonstration">Demonstration</a></li>
+    <li><a href="#api-copyright">API Copyright</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#sponsor">Sponsor</a></li>
+    <li><a href="#donations">Donations</a></li>
+  </ul>
 
-```git
-git clone --recurse-submodules -j8 https://github.com/YiJhu/Aria_helper.git
-```
+  <h2 id="install">Install</h2>
+  <p>To use Aria_helper, make sure you have the following dependencies installed on your system:</p>
+  <ol>
+    <li><a href="https://python.org">Python 3.x</a> - Ensure you have Python 3.x installed on your system.</li>
+    <li><a href="https://visualstudio.microsoft.com/downloads">VC++ build tools</a> 2015 or Latest Version (Windows only)
+      - Required for Windows users.</li>
+    <li><a href="https://rust-lang.org">Rust</a> - Ensure you have Rust installed on your system.</li>
+  </ol>
 
-or 
+  <h2 id="install-submodules">Install submodules</h2>
+  <p>You can clone the repository along with its submodules using the following Git command:</p>
+  <pre><code>git clone --recurse-submodules -j8 https://github.com/YiJhu/Aria_helper.git</code></pre>
+  <p>Alternatively, you can install the required submodules using Python:</p>
+  <pre><code>pip install -r requirements.txt</code></pre>
 
-```python
-pip install -r requirements.txt
-```
+  <h2 id="demonstration">Demonstration</h2>
+  <p>A demo bot is available to try out Aria_helper functionality directly. You can access the demo bot by clicking on
+    the following links:</p>
+  <ul>
+    <li><a href="https://line.me/R/ti/p/g3c8dOwDFb">Demo Bot</a></li>
+    <li><a href="https://line.me/R/ti/p/g3c8dOwDFb">Add Bot</a></li>
+  </ul>
+  <a href="https://line.me/R/ti/p/g3c8dOwDFb"><img
+      src="https://github.com/YiJhu/Aria_helper/blob/main/docs/demon.png" alt="Demo Bot"></a>
+  <a href="https://line.me/R/ti/p/g3c8dOwDFb"><img
+      src="https://github.com/YiJhu/Aria_helper/blob/main/docs/add.png" alt="Add Bot"></a>
 
-# demonstration
+  <h2 id="api-copyright">API Copyright</h2>
+  <p>The project utilizes the <a href="https://github.com/DeachSword/CHRLINE">CHRLINE</a> API, which is copyrighted by
+    DeachSword.</p>
 
-You can also use the demo bot directly
+  <h2 id="license">License</h2>
+  <p>The project is licensed under the following license:</p>
+  <a href="https://app.fossa.com/projects/git%2Bgithub.com%2FYiJhu%2FAria_helper?ref=badge_large"><img
+      src="https://app.fossa.com/api/projects/git%2Bgithub.com%2FYiJhu%2FAria_helper.svg?type=large"
+      alt="FOSSA Status"></a>
 
-[![image](https://github.com/YiJhu/Aria_helper/blob/main/docs/demon.png)](https://line.me/R/ti/p/g3c8dOwDFb)
-[![Add](https://github.com/YiJhu/Aria_helper/blob/main/docs/add.png)](https://line.me/R/ti/p/g3c8dOwDFb)
+  <h2 id="sponsor">Sponsor</h2>
+  <p>If you find the project useful, you can sponsor it through the following platforms:</p>
+  <ul>
+    <li><a href="www.paypal.me/YiJhu486">PayPal</a></li>
+    <li><a href="https://www.jkopay.com/transfer?j=Transfer:908589779">街口支付</a></li>
+    <li><a href="https://ko-fi.com/Z8Z5D0PMY">Ko-fi</a></li>
+    <li><a href="https://liberapay.com/LH/donate">Liberapay</a></li>
+  </ul>
 
-# API Copyright
+  <h2 id="donations">Donations</h2>
+  <p>If you wish to make a cryptocurrency donation, you can send USDT (Torn/TRC20) to the following address:</p>
+  <pre>TAWJus92Crqdnm8MVw2HmoNEg4wq9WPDFH</pre>
 
-[CHRLINE](https://github.com/DeachSword/CHRLINE) is copyright by DeachSword
+</body>
 
-
-## License
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FYiJhu%2FAria_helper.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FYiJhu%2FAria_helper?ref=badge_large)
-
-
-## Sponsor
-
-[PayPal](www.paypal.me/YiJhu486)
-
-[街口支付](https://www.jkopay.com/transfer?j=Transfer:908589779)
-
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Z8Z5D0PMY)
-
-<noscript><a href="https://liberapay.com/LH/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
-
-USDT(Torn/TRC20)
-```
-TAWJus92Crqdnm8MVw2HmoNEg4wq9WPDFH
-```
+</html>
