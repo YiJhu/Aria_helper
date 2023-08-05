@@ -48,4 +48,6 @@ You can also use the demo bot directly
 <noscript><a href="https://liberapay.com/LH/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
 
 USDT(Torn/TRC20)
-TAWJus92Crqdnm8MVw2HmoNEg4wq9WPDFH)
+```
+TAWJus92Crqdnm8MVw2HmoNEg4wq9WPDFH
+```
