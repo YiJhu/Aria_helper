@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 '''
     This is a main program in Aria helper CHRLINE Version.
-    Versoin: CHR_Aria 1.2.2
+    Versoin: CHR_Aria 1.2.3
     Auther: YiJhu (https://github.com/yijhu/)
     Web: (https://profile.yijhu.xyz)
     ------------------------------------------------------
@@ -26,8 +26,8 @@ except:
 Admin = ["Admin_Mids"]  # Admin
 Owner = ["Owner_Mids"]  # Owner
 
-rev = 0
-# rev = bot.getLastOpRevision()
+# rev = 0
+rev = bot.getLastOpRevision()
 
 helplist = "/help\n/speed\n/time\n/me\n/mid:{get your or someone by Tag}\n/userinfo:{Mids or Tags}\n/gid\n/getcontact:{Mids or Tags}\n/ginfo\n/gowner\n/url:{on/off}\n/regname:{new group name}\n/bye\n/kick:{mid}\n/mk:@{Tags}\n/cancel\n/data:{num}"
 
@@ -42,7 +42,8 @@ while True:
                     msg = op[20]
                     if msg[15] == 0:
                         if msg[3] == 2:
-                            if 18 in msg and msg[18] is not None and 'e2eeVersion' in msg[18]: # E2EE Support
+                            # E2EE Support
+                            if 18 in msg and msg[18] is not None and 'e2eeVersion' in msg[18]:
                                 msg[10] = bot.decryptE2EETextMessage(msg)
 
                             if msg[1] in Owner or msg[1] in Admin:
@@ -245,6 +246,10 @@ while True:
                                     try:
                                         Invitees = bot.getChats(
                                             [msg[2]])[1][0][8][1][5]
+                                        if len(Invitees) == 0:
+                                            bot.replyMessage(
+                                                msg, "NO Invitation")
+                                            continue
                                         # The recommended value of max_workers for this function is 3
                                         with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
                                             for member in Invitees:
@@ -253,11 +258,11 @@ while True:
                                                     bot.cancelChatInvitation(msg[2], member))
                                                 time.sleep(0.8)
                                             end = time.time()
+                                            bot.replyMessage(
+                                                msg, (end - start))
+                                    except Exception as e:
                                         bot.replyMessage(
-                                            msg, (end - start))
-                                    except:
-                                        bot.replyMessage(
-                                            msg, "NO Invitation")
+                                            msg, f"【Cancel Error】\n{e.message}")
 
                                 if msg[10].startswith("/data:"):  # data:num
                                     num = int(msg[10][6:])+1
@@ -275,7 +280,7 @@ while True:
                                     try:
                                         exec(command)
                                     except Exception as e:
-                                        bot.replyMessage(msg, f'{e.message}')
+                                        bot.replyMessage(msg, f'{e}')
 
                                 if msg[10].startswith("/rename:"):  # rename:str
                                     key = msg[10][8:]
@@ -300,10 +305,14 @@ while True:
                                             msg, f'【Re PIC ERROR】\n{e.message}')
 
                                 if msg[10].startswith("/rebio:"):  # rebio:str
-                                    bio = msg[10][7:]
-                                    bot.updateProfileAttribute(16, bio)
-                                    bot.replyMessage(
-                                        msg[2], f'【Re BIO】\n{bio}')
+                                    try:
+                                        bio = msg[10][7:]
+                                        bot.updateProfileAttribute(16, bio)
+                                        bot.replyMessage(
+                                            msg[2], f'【Re BIO】\n{bio}')
+                                    except Exception as e:
+                                        bot.replyMessage(
+                                            msg, f'【Re BIO ERROR】\n{e.message}')
 
                                 if msg[10] == '/Kickall':  # remove people
                                     klist = bot.getChats([msg[2]])[
@@ -312,7 +321,7 @@ while True:
                                     with concurrent.futures.ThreadPoolExecutor(max_workers=15) as executor:
                                         start = time.time()
                                         for kmid in klist:
-                                            if kmid in (Owner, bot.mid):
+                                            if kmid in Owner or kmid in bot.mid:
                                                 continue
                                             executor.submit(
                                                 bot.deleteOtherFromChat(msg[2], kmid))
@@ -465,9 +474,9 @@ while True:
                         pass
 
                 except Exception as e:
-                    bot.log(f'Receive Message Error: {e.message}')
+                    bot.log(f'Receive Message Error: {e}')
 
-            if op[3] == 124 and bot.mid in op[12]:  # for notification invite to chat
+            if op[3] == 124 and bot.mid in op[12]:  # for notifed invite to chat
                 try:
                     bot.acceptChatInvitation(op[10])
                     if op[11] in Admin or op[11] in Owner:
@@ -477,4 +486,11 @@ while True:
                         bot.deleteSelfFromChat(op[10])
                         # bot.rejectChatInvitation(op[10])
                 except Exception as e:
-                    bot.log(f'Notification Invite To Chat Error: {e.message}')
+                    bot.log(f'Notified Invite To Chat Error: {e.message}')
+
+            if op[3] == 5:  # for notifed add contact
+                try:
+                    text = f"Hi {bot.getContact(op[10])[22]} Thanks Add Me.\nMy creator is: L.H.\n[Author Page]\nhttps://profile.yijhu.xyz/\n\n[Privacy Policy]\nhttps://yijhu.xyz/privacy/\n[Support this project]\nko-fi\nhttps://ko-fi.com/archibald_tw\nPayPal\nwww.paypal.me/YiJhu486\n街口支付(JKO Pay)\nhttps://www.jkopay.com/transfer?j=Transfer:908589779"
+                    bot.sendCompactMessage(op[10], text)
+                except Exception as e:
+                    bot.log(f'Notified Add Contact Error: {e.message}')
