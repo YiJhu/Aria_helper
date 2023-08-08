@@ -2,16 +2,20 @@
 # -*- coding: utf-8 -*-
 '''
     This is a main program in Aria helper CHRLINE Version.
-    Versoin: CHR_Aria 1.2.3
+    Versoin: CHR_Aria 1.3.0
     Auther: YiJhu (https://github.com/yijhu/)
     Web: (https://profile.yijhu.xyz)
+    License: BSD 3-Clause License
+    Repository: (https://github.com/YiJhu/Aria_helper)
     ------------------------------------------------------
     Library: CHRLINE (ver: 2.5.24)
 '''
 from CHRLINE import CHRLINE
 import re
+import json
 import time
 import timeit
+import codecs
 import concurrent
 
 
@@ -23,8 +27,17 @@ try:
 except:
     bot.registerE2EESelfKey()
 
-Admin = ["Admin_Mids"]  # Admin
-Owner = ["Owner_Mids"]  # Owner
+dbOpen = codecs.open("./data/auther.json", "r", "utf-8")
+db = json.load(dbOpen)
+dbOpen.close()
+
+Admin = []  # Admin
+for admin in db['admin']:
+    Admin.append(admin)
+
+Owner = []  # Owner
+for owner in db['owner']:
+    Owner.append(owner)
 
 # rev = 0
 rev = bot.getLastOpRevision()
@@ -40,8 +53,8 @@ while True:
             if op[3] == 26:  # for receive message
                 try:
                     msg = op[20]
-                    if msg[15] == 0:
-                        if msg[3] == 2:
+                    if msg[15] == 0:  # for text
+                        if msg[3] == 2:  # for chatrooms
                             # E2EE Support
                             if 18 in msg and msg[18] is not None and 'e2eeVersion' in msg[18]:
                                 msg[10] = bot.decryptE2EETextMessage(msg)
@@ -52,7 +65,7 @@ while True:
                                         help = str(helplist)
                                         if msg[1] in Owner:
                                             help += str(
-                                                "\n/exec:{text}\n/rename:{text}\n/rebio:{text}\n/repic:{path}\n/Kickall")
+                                                "\n/exec:{text}\n/rename:{text}\n/rebio:{text}\n/repic:{path}\n/Kickall\n/oplist\n/addop:{Tags}\n/delop:{Tags}")
                                         else:
                                             continue
                                         executor.submit(bot.replyMessage(
@@ -68,13 +81,17 @@ while True:
                                 if msg[10] == '/time':  # get time
                                     with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
                                         stime = bot.getServerTime()
-                                        executor.submit(bot.replyMessage(msg,  "【Now Time (UTC+8)】\n" + time.strftime(
+                                        executor.submit(bot.replyMessage(msg,  "【Now Time】\n" + time.strftime(
                                             '%Y-%m-%d %I:%M:%S %p', time.localtime(stime/1000))))
 
                                 if msg[10] == '/me':  # get your contact
-                                    with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
-                                        executor.submit(bot.sendContact(
-                                            msg[2], msg[1], "yijhu.xyz"))
+                                    try:
+                                        with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
+                                            executor.submit(bot.sendContact(
+                                                msg[2], msg[1], "yijhu.xyz"))
+                                    except Exception as e:
+                                        bot.replyMessage(
+                                            msg, f'{e.message}')
 
                                 # get (your or someone) LINE-legy mid
                                 if msg[10].startswith('/mid'):
@@ -182,16 +199,20 @@ while True:
 
                                 if msg[10].startswith("/url:"):  # url:on / off
                                     key = msg[10][5:]
-                                    if key.lower() == "on":
-                                        bot.updateChatPreventedUrl(
-                                            msg[2], False)
-                                        uri = bot.reissueChatTicket(msg[2])
+                                    try:
+                                        if key.lower() == "on":
+                                            bot.updateChatPreventedUrl(
+                                                msg[2], False)
+                                            uri = bot.reissueChatTicket(msg[2])
+                                            bot.replyMessage(
+                                                msg, f"https://line.me/R/ti/g/{uri[1]}")
+                                        if key.lower() == "off":
+                                            bot.reissueChatTicket(msg[2])
+                                            bot.updateChatPreventedUrl(
+                                                msg[2], True)
+                                    except Exception as e:
                                         bot.replyMessage(
-                                            msg, f"https://line.me/R/ti/g/{uri[1]}")
-                                    if key.lower() == "off":
-                                        bot.reissueChatTicket(msg[2])
-                                        bot.updateChatPreventedUrl(
-                                            msg[2], True)
+                                            msg, f'【ERROR】\n{e.message}')
 
                                 if msg[10].startswith("/regname:"):  # regname:str
                                     key = msg[10][9:]
@@ -210,37 +231,48 @@ while True:
                                 if msg[10].startswith("/kick:"):  # kick:mid
                                     kmid = re.findall(re.compile(
                                         r'(?<![a-f0-9])u[a-f0-9]{32}(?![a-f0-9])'), msg[10][6:])
+                                    klist = []
                                     try:
-                                        if bot.mid == kmid:
-                                            continue
-                                        bot.deleteOtherFromChat(
-                                            msg[2], kmid)
-                                        xname = bot.getContact(f'{kmid}')
+                                        for someone in kmid:
+                                            mid = bot.getContact(someone)
+                                            if mid[1] in Owner or mid[1] in Admin or mid[1] in bot.mid:
+                                                continue
+                                            if someone not in klist:
+                                                klist.append(mid[1])
+                                            with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
+                                                txt = ""
+                                                for kmid in klist:
+                                                    executor.submit(
+                                                        bot.deleteOtherFromChat(msg[2], kmid))
+                                                    txt += f"\n．{mid[22]}"
                                         bot.replyMessage(
-                                            msg, '【Kick OUT】\n' + xname[22])
+                                            msg, f'【Kick OUT】{txt}')
                                     except Exception as e:
                                         bot.replyMessage(
-                                            msg, f"【Kick OUT Error】\n{e.message}")
+                                            msg, f'【Kick OUT ERROR】\n{e.message}')
 
                                 if msg[10].startswith("/mk:"):  # mk:mentions
                                     klist = []
                                     mentions = bot.getMentioneesByMsgData(msg)
-                                    for someone in mentions:
-                                        mid = bot.getContact(someone)
-                                        if bot.mid in mid[1]:
-                                            continue
-                                        if mid[1] not in klist:
-                                            klist.append(mid[1])
-                                            # The limit value of max_workers is 32
-                                            with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
-                                                for kmid in klist:
-                                                    executor.submit(
-                                                        bot.deleteOtherFromChat(msg[2], kmid))
+                                    try:
+                                        for someone in mentions:
+                                            mid = bot.getContact(someone)
+                                            if bot.mid in mid[1]:
+                                                continue
+                                            if mid[1] not in klist:
+                                                klist.append(mid[1])
+                                                # The limit value of max_workers is 32
+                                                with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
                                                     txt = ""
-                                                    txt += mid[22]
+                                                    for kmid in klist:
+                                                        executor.submit(
+                                                            bot.deleteOtherFromChat(msg[2], kmid))
+                                                        txt += f"\n．{mid[22]}"
                                         bot.replyMessage(
-                                            msg, f'【Kick OUT】\n{txt}')
-                                    del klist
+                                            msg, f'【Kick OUT】{txt}')
+                                    except Exception as e:
+                                        bot.replyMessage(
+                                            msg, f'【Kick OUT ERROR】\n{e.message}')
 
                                 if msg[10] == '/cancel':  # cancel all invitation
                                     try:
@@ -328,9 +360,72 @@ while True:
                                         end = time.time()
                                     bot.replyMessage(msg, (end - start))
 
-                    # call
+                                if msg[10] == '/oplist':  # get op list
+                                    try:
+                                        oplist = "【OP LIST】"
+                                        for op in Admin:
+                                            oplist += "\n．" + \
+                                                bot.getContact(op)[22]
+                                        bot.replyMessage(msg, oplist)
+                                    except Exception as e:
+                                        bot.replyMessage(
+                                            msg, f'【OP LIST ERROR】\n{e.message}')
+
+                                if msg[10].startswith("/addop:"):  # addop:mentions
+                                    try:
+                                        mentionees = bot.getMentioneesByMsgData(
+                                            msg)
+                                        if not mentionees:
+                                            bot.replyMessage(
+                                                msg, "【ADD ADMIN ERROR】\nPlease Mention the user you want to add.")
+                                        with open('./data/auther.json', 'r') as f:
+                                            auther = json.load(f)
+                                            admin_list = auther.get(
+                                                'admin', [])
+                                            owner_list = auther.get(
+                                                'owner', [])
+                                            for mention in mentionees:
+                                                mid = mention
+                                                if mid not in admin_list or mid not in owner_list:
+                                                    admin_list.append(mid)
+                                                    Admin.append(mid)
+                                            auther['admin'] = admin_list
+                                        with open('./data/auther.json', 'w') as f:
+                                            json.dump(auther, f, indent=4)
+                                        bot.replyMessage(
+                                            msg, "Added user as admin!")
+                                    except Exception as e:
+                                        bot.replyMessage(
+                                            msg, f'【ADD ADMIN ERROR】\n{e.message}')
+
+                                    # delop:mentions
+                                    if msg[10].startswith("/delop:"):
+                                        try:
+                                            mentionees = bot.getMentioneesByMsgData(
+                                                msg)
+                                            if not mentionees:
+                                                bot.replyMessage(
+                                                    msg, "【REMOVE ADMIN ERROR】\nPlease Mention the user you want to remove.")
+                                            with open('./data/auther.json', 'r') as f:
+                                                auther = json.load(f)
+                                                admin_list = auther.get(
+                                                    'admin', [])
+                                                for mention in mentionees:
+                                                    mid = mention
+                                                    if mid in admin_list:
+                                                        admin_list.remove(mid)
+                                                        Admin.remove(mid)
+                                                auther['admin'] = admin_list
+                                            with open('./data/auther.json', 'w') as f:
+                                                json.dump(auther, f, indent=4)
+                                            bot.replyMessage(
+                                                msg, "Removed user from admin!")
+                                        except Exception as e:
+                                            bot.replyMessage(
+                                                msg, f'【REMOVE ADMIN ERROR】\n{e.message}')
+
                     # Not every device is supported. exg:chrome and more...
-                    if msg[15] == 6:
+                    if msg[15] == 6:  # for call
                         if msg[3] == 2:  # for chat room
                             contentMetadata = msg[18]
                             stype = [{"c": "Group "}, {
@@ -344,8 +439,8 @@ while True:
                                 if contentMetadata['GC_EVT_TYPE'] == 'E':  # end
                                     pass
 
-                    if msg[15] == 13:  # user infomation
-                        if msg[3] == 2:  # for chat room
+                    if msg[15] == 13:  # for contacts
+                        if msg[3] == 2:  # for chatrooms
                             # if msg[1] in Admin:
                             # The limit value of max_workers is 32
                             with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
@@ -353,7 +448,7 @@ while True:
                                 executor.submit(bot.sendCompactMessage(msg[2], 'User Name:\n%s\nUser Mid:\n%s\nStatus Message:\n(Only show 100 words!)\n%s\nProfile Link:\n%s/%s' % (
                                     someone[22], someone[1], someone[26][:100], bot.LINE_PROFILE_CDN_DOMAIN, someone[24] if 24 in someone else "None")))
 
-                        if msg[3] == 0:  # for chat
+                        if msg[3] == 0:  # for chats
                             with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
                                 someone = bot.getContact(msg[18]["mid"])
                                 # sendChatChecked
@@ -363,8 +458,8 @@ while True:
                                 executor.submit(
                                     bot.sendCompactMessage(msg[1], text))
 
-                    if msg[15] == 14:  # file infomation
-                        if msg[3] == 2:
+                    if msg[15] == 14:  # for file
+                        if msg[3] == 2:  # for chatrooms
                             contentMetadata = msg[18]
                             ftxt = "【File Info】"
                             if 'FILE_NAME' in contentMetadata:
@@ -388,8 +483,8 @@ while True:
                                     '%Y-%m-%d %I:%M:%S %p', time.localtime(int(contentMetadata['FILE_EXPIRE_TIMESTAMP'])/1000)))
                             bot.sendCompactMessage(msg[2], ftxt)
 
-                    if msg[15] == 16:
-                        if msg[3] == 2:
+                    if msg[15] == 16:  # for post notification
+                        if msg[3] == 2:  # for chatrooms
                             contentMetadata = msg[18]
                             if contentMetadata['serviceType'] == 'GB':  # group post
                                 g_post = "【Group Post Info】"
@@ -470,11 +565,20 @@ while True:
                                         contentMetadata['postEndUrl'].replace("line://", "https://line.me/R/"))
                                     bot.replyMessage(msg, album)
 
-                    if msg[15] == 18:  # del Album or photo or inv_someone or cancel_someone
-                        pass
+                    if msg[15] == 18:  # for chat event
+                        try:
+                            pass
+                        except Exception as e:
+                            bot.replyMessage(msg, f'{e.message}')
 
                 except Exception as e:
                     bot.log(f'Receive Message Error: {e}')
+
+            if op[3] == 25:  # for send message
+                try:
+                    pass
+                except Exception as e:
+                    bot.log(f'Send Message Error: {e}')
 
             if op[3] == 124 and bot.mid in op[12]:  # for notifed invite to chat
                 try:
@@ -482,11 +586,34 @@ while True:
                     if op[11] in Admin or op[11] in Owner:
                         bot.sendCompactMessage(op[10], 'THANKS FOR USING.')
                     else:
-                        bot.sendCompactMessage(op[10], 'No PERMISSION.')
+                        bot.sendCompactMessage(op[10], 'NO PERMISSION.')
                         bot.deleteSelfFromChat(op[10])
                         # bot.rejectChatInvitation(op[10])
                 except Exception as e:
                     bot.log(f'Notified Invite To Chat Error: {e.message}')
+
+            if op[3] == 127:  # for delete self from chat
+                try:
+                    if op[10] in bot.groups:
+                        bot.groups.remove(op[10])
+                except Exception as e:
+                    bot.log(f'Delete Self From Chat Error: {e.message}')
+
+            if op[3] == 129:  # for accept chat invitation
+                try:
+                    if op[10] not in bot.groups:
+                        bot.groups.append(op[10])
+                except Exception as e:
+                    bot.log(f'Accept Chat Invitation Error: {e.message}')
+
+            if op[3] == 133:  # for notifed delete other from chat
+                try:
+                    if op[10] in bot.groups and op[12] in bot.mid:
+                        bot.groups.remove(op[10])
+                    bot.log(f'{op[11]} kicked {op[12]} from {op[10]}')
+                except Exception as e:
+                    bot.log(
+                        f'Notified Delete Other From Chat Error: {e.message}')
 
             if op[3] == 5:  # for notifed add contact
                 try:
