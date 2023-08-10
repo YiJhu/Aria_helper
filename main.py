@@ -16,11 +16,15 @@ import json
 import time
 import timeit
 import codecs
+import datetime
+import threading
 import concurrent
 
 
-bot = CHRLINE(authTokenOrEmail="Token or mail", password="Password",
+bot = CHRLINE(authTokenOrEmail="", password=None,
               device="DESKTOPWIN", os_name="Aria helper", useThrift=False)
+
+bot_name = ""
 
 try:
     bot.getE2EESelfKeyData()
@@ -44,6 +48,22 @@ rev = bot.getLastOpRevision()
 
 helplist = "/help\n/speed\n/time\n/me\n/mid:{get your or someone by Tag}\n/userinfo:{Mids or Tags}\n/gid\n/getcontact:{Mids or Tags}\n/ginfo\n/gowner\n/url:{on/off}\n/regname:{new group name}\n/bye\n/kick:{mid}\n/mk:@{Tags}\n/cancel\n/data:{num}"
 
+def nameUpdate(): # update bot name
+    while True:
+        try:
+            try:
+                bot.updateProfileAttribute(
+                    2, f"{(bot_name).split()[0]} {datetime.datetime.now().strftime('(%H:%M)')}")
+                bot.log("nameUpdate")
+            except Exception as e:
+                bot.log(f"nameUpdate Error: {e}")
+            time.sleep(300)
+        except:
+            return
+
+
+thread = threading.Thread(target=nameUpdate, daemon=True).start()
+
 while True:
     Ops = bot.fetchOps(rev)
     for op in Ops:
@@ -60,7 +80,7 @@ while True:
                                 msg[10] = bot.decryptE2EETextMessage(msg)
 
                             if msg[1] in Owner or msg[1] in Admin:
-                                if msg[10] == '/help':  # help commands
+                                if msg[10] in '/help':  # help commands
                                     with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
                                         help = str(helplist)
                                         if msg[1] in Owner:
@@ -70,21 +90,23 @@ while True:
                                             continue
                                         executor.submit(bot.replyMessage(
                                             msg, f"【HELP COMMAND】\n{help}"))
+                                    bot.replyMessage(
+                                        msg, "[Author Page]\nhttps://profile.yijhu.xyz/\n[Open source]\nhttps://github.com/YiJhu/Aria_helper/\n[Privacy Policy]\nhttps://yijhu.xyz/privacy/\n[Support this project]\nhttps://ko-fi.com/archibald_tw")
 
-                                if msg[10] == '/speed':  # speed test
+                                if msg[10] in '/speed':  # speed test
                                     with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
                                         speed = timeit.timeit(
                                             '"-".join(str(n) for n in range(100))', number=10000)
                                         executor.submit(bot.replyMessage(
                                             msg, f"SpeedTest： {speed} s"))
 
-                                if msg[10] == '/time':  # get time
+                                if msg[10] in '/time':  # get time
                                     with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
                                         stime = bot.getServerTime()
                                         executor.submit(bot.replyMessage(msg,  "【Now Time】\n" + time.strftime(
                                             '%Y-%m-%d %I:%M:%S %p', time.localtime(stime/1000))))
 
-                                if msg[10] == '/me':  # get your contact
+                                if msg[10] in '/me':  # get your contact
                                     try:
                                         with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
                                             executor.submit(bot.sendContact(
@@ -139,7 +161,7 @@ while True:
                                     except Exception as e:
                                         bot.replyMessage(msg, f'{e.message}')
 
-                                if msg[10] == '/gid':  # get chat room id
+                                if msg[10] in '/gid':  # get chat room id
                                     bot.replyMessage(msg, msg[2])
 
                                 # get contact via LINE-legy mid or mentions
@@ -159,7 +181,7 @@ while True:
                                             bot.replyMessage(
                                                 msg, f'{e.message}')
 
-                                if msg[10] == '/ginfo':  # get chat room infomation
+                                if msg[10] in '/ginfo':  # get chat room infomation
                                     gid = bot.getChats([msg[2]])[1][0]
                                     g_info = "【Group Info】"
                                     g_info += "\n[Group Name]\n" + gid[6]
@@ -185,7 +207,7 @@ while True:
                                     bot.replyMessage(
                                         msg, f'{g_info}')
 
-                                if msg[10] == '/gowner':
+                                if msg[10] in '/gowner':
                                     gid = bot.getChats([msg[2]])[1][0]
                                     try:
                                         bot.getContact(gid[8][1][1])[22]
@@ -224,7 +246,7 @@ while True:
                                         bot.replyMessage(
                                             msg, f'【Re GROUP NAME ERROR】\n{e.message}')
 
-                                if msg[10] == '/bye':  # quit bot
+                                if msg[10] in '/bye':  # quit bot
                                     bot.replyMessage(msg, "BYE~")
                                     bot.deleteSelfFromChat(msg[2])
 
@@ -274,7 +296,7 @@ while True:
                                         bot.replyMessage(
                                             msg, f'【Kick OUT ERROR】\n{e.message}')
 
-                                if msg[10] == '/cancel':  # cancel all invitation
+                                if msg[10] in '/cancel':  # cancel all invitation
                                     try:
                                         Invitees = bot.getChats(
                                             [msg[2]])[1][0][8][1][5]
@@ -328,7 +350,7 @@ while True:
                                         bot.replyMessage(
                                             msg, f'【Re NAME ERROR】\n{e.message}')
 
-                                if msg[10] == '/repic:':  # repic: file_Path
+                                if msg[10] in '/repic:':  # repic: file_Path
                                     key = msg[10][7:]
                                     try:
                                         bot.updateProfileImage(key)
@@ -346,7 +368,7 @@ while True:
                                         bot.replyMessage(
                                             msg, f'【Re BIO ERROR】\n{e.message}')
 
-                                if msg[10] == '/Kickall':  # remove people
+                                if msg[10] in '/Kickall':  # remove people
                                     klist = bot.getChats([msg[2]])[
                                         1][0][8][1][4]
                                     # The recommended value of max_workers for this function is 15
@@ -360,7 +382,7 @@ while True:
                                         end = time.time()
                                     bot.replyMessage(msg, (end - start))
 
-                                if msg[10] == '/oplist':  # get op list
+                                if msg[10] in '/oplist':  # get op list
                                     try:
                                         oplist = "【OP LIST】"
                                         for op in Admin:
@@ -434,10 +456,14 @@ while True:
                                 type_voices = stype[0][contentMetadata['GC_CHAT_MID']
                                                        [:1]]+stype[1][contentMetadata['GC_MEDIA_TYPE']]
                                 if contentMetadata['GC_EVT_TYPE'] == 'S':  # start
-                                    bot.sendCompactMessage(msg[2], "【" + type_voices + " Start】\nCorrespondent：" + bot.getContact(
-                                        msg[1])[22] + "\n" + time.strftime('%H:%M:%S'))
+                                    bot.sendCompactMessage(msg[2], f"【{type_voices} Start】\nCorrespondent：" + bot.getContact(
+                                        msg[1])[22] + "\n" + time.strftime('%Y-%m-%d %I:%M:%S %p'))
                                 if contentMetadata['GC_EVT_TYPE'] == 'E':  # end
-                                    pass
+                                    duration = datetime.timedelta(
+                                        milliseconds=int(contentMetadata['DURATION']))
+                                    duration_formatted = f"{duration.days}d {duration.seconds//3600}h {duration.seconds//60%60}m {duration.seconds%60}s"
+                                    response = f"【{type_voices} Ended】\n[Duration]\n{duration_formatted}\n{time.strftime('%Y-%m-%d %I:%M:%S %p')}"
+                                    bot.sendCompactMessage(msg[2], response)
 
                     if msg[15] == 13:  # for contacts
                         if msg[3] == 2:  # for chatrooms
@@ -567,26 +593,35 @@ while True:
 
                     if msg[15] == 18:  # for chat event
                         try:
-                            pass
+                            if msg[3] == 2:
+                                contentMetadata = msg[18]
+                                event_type = contentMetadata['LOC_KEY']
+                                contact_name = bot.getContact(msg[1])[22]
+                                album_name = contentMetadata['LOC_ARGS']
+                                if event_type == 'BD':
+                                    message = f"【Deleted Album】\n[Deleted Person]\n{contact_name}\n[Album Name]\n{album_name}"
+                                elif event_type == 'BO':
+                                    message = f"【Deleted Photo】\n[Deleted Person]\n{contact_name}\n[Album Name]\n{album_name}"
+                                elif event_type == 'BB':
+                                    old_name, new_name = album_name.split(
+                                        "\x1e")
+                                    message = f"【Changed Album Name】\n[Changed Person]\n{contact_name}\n[Old Name] ==> {old_name}\n[New Name] ==> {new_name}"
+                                bot.sendCompactMessage(msg[2], message)
                         except Exception as e:
-                            bot.replyMessage(msg, f'{e.message}')
+                            bot.log(f'Chat Event Error: {e}')
 
                 except Exception as e:
                     bot.log(f'Receive Message Error: {e}')
-
-            if op[3] == 25:  # for send message
-                try:
-                    pass
-                except Exception as e:
-                    bot.log(f'Send Message Error: {e}')
 
             if op[3] == 124 and bot.mid in op[12]:  # for notifed invite to chat
                 try:
                     bot.acceptChatInvitation(op[10])
                     if op[11] in Admin or op[11] in Owner:
-                        bot.sendCompactMessage(op[10], 'THANKS FOR USING.')
+                        bot.sendCompactMessage(
+                            op[10], 'THANKS FOR USING.\n[Author Page]\nhttps://profile.yijhu.xyz/\n[Open source]\nhttps://github.com/YiJhu/Aria_helper/\n[Privacy Policy]\nhttps://yijhu.xyz/privacy/\n[Support this project]\nhttps://ko-fi.com/archibald_tw')
                     else:
-                        bot.sendCompactMessage(op[10], 'NO PERMISSION.')
+                        bot.sendCompactMessage(
+                            op[10], 'NO PERMISSION.\n[Author Page]\nhttps://profile.yijhu.xyz/\n[Open source]\nhttps://github.com/YiJhu/Aria_helper/\n[Privacy Policy]\nhttps://yijhu.xyz/privacy/\n[Support this project]\nhttps://ko-fi.com/archibald_tw')
                         bot.deleteSelfFromChat(op[10])
                         # bot.rejectChatInvitation(op[10])
                 except Exception as e:
