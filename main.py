@@ -3,6 +3,7 @@
 '''
     This is a main program in Aria helper CHRLINE Version.
     Versoin: CHR_Aria 1.3.0
+    Type: single
     Auther: YiJhu (https://github.com/yijhu/)
     Web: (https://profile.yijhu.xyz)
     License: BSD 3-Clause License
