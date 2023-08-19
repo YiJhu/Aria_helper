@@ -1,7 +1,5 @@
-<h1>Aria_helper</h1>
-<p>Aria helper is a Python project for the CHRLINE version. This README
-  file serves as documentation for the project, providing information on installation, usage, and how to contribute to
-  the project.</p>
+<h1>Aria helper</h1>
+<p>Aria helper is a Python project for the CHRLINE version. The service started in 2018 as a closed source project, but in 2022 I decided to rewrite it in python and make it open source which is what this project is all about, and I used the CHRLINE api because it's the most practical and easiest to use!</p>
 
 <h2>Table of Contents</h2>
 <ul>
@@ -15,7 +13,7 @@
 </ul>
 
 <h2 id="install">Install</h2>
-<p>To use Aria_helper, make sure you have the following dependencies installed on your system:</p>
+<p>To use Aria helper, make sure you have the following dependencies installed on your system:</p>
 <ol>
   <li><a href="https://python.org">Python 3.x</a> - Ensure you have Python 3.x installed on your system.</li>
   <li><a href="https://visualstudio.microsoft.com/downloads">VC++ build tools</a> 2015 or Latest Version (Windows only)
@@ -31,7 +29,7 @@
 
 <h2 id="demonstration">Demonstration</h2>
 <p>A demo bot is available to try out Aria_helper functionality directly. You can access the demo bot by clicking on
-  the following link:</p>
+  the following:</p>
 <a href="https://line.me/R/ti/p/g3c8dOwDFb"><img src="https://github.com/YiJhu/Aria_helper/blob/main/docs/demon.png"
     alt="Demo Bot"></a>
 <a href="https://line.me/R/ti/p/g3c8dOwDFb"><img src="https://github.com/YiJhu/Aria_helper/blob/main/docs/add.png"
