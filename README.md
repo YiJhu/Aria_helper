@@ -48,7 +48,7 @@
 <h2 id="sponsor">Sponsor</h2>
 <p>If you find the project useful, you can sponsor it through the following platforms:</p>
 <ul>
-  <li><a href="htyps://www.paypal.me/YiJhu486/">PayPal</a></li>
+  <li><a href="https://www.paypal.me/YiJhu486/">PayPal</a></li>
   <li><a href="https://www.jkopay.com/transfer?j=Transfer:908589779">街口支付</a></li>
   <li><a href="https://ko-fi.com/Z8Z5D0PMY">Ko-fi</a></li>
   <li><a href="https://liberapay.com/LH/donate">Liberapay</a></li>
