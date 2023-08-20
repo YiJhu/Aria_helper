@@ -28,7 +28,7 @@
 <pre><code>pip install -r requirements.txt</code></pre>
 
 <h2 id="demonstration">Demonstration</h2>
-<p>A demo bot is available to try out Aria_helper functionality directly. You can access the demo bot by clicking on
+<p>A demo bot is available to try out Aria helper functionality directly. You can access the demo bot by clicking on
   the following:</p>
 <a href="https://line.me/R/ti/p/g3c8dOwDFb"><img src="https://github.com/YiJhu/Aria_helper/blob/main/docs/demon.png"
     alt="Demo Bot"></a>
@@ -37,7 +37,7 @@
 
 <h2 id="api-copyright">API Copyright</h2>
 <p>The project utilizes the <a href="https://github.com/DeachSword/CHRLINE">CHRLINE</a> API, which is copyrighted by
-  DeachSword.</p>
+ <a href="https://github.com/DeachSword">DeachSword</a>.</p>
 
 <h2 id="license">License</h2>
 <p>The project is licensed under the following license:</p>
