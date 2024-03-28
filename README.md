@@ -56,4 +56,7 @@
 
 <h2 id="donations">Donations</h2>
 <p>If you wish to make a cryptocurrency donation, you can send USDT (Torn/TRC20) to the following address:</p>
-<pre>TAWJus92Crqdnm8MVw2HmoNEg4wq9WPDFH</pre>
+<pre>TAWJus92Crqdnm8MVw2HmoNEg4wq9WPDFH
+</pre>
+<p>or you can send  BTC (Bitcion) to the following address:</p>
+<pre>1MCSmbhEVk9x4qgehho9fJeTEcCVyWbksd</pre>
