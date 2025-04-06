@@ -30,9 +30,7 @@
 <h2 id="demonstration">Demonstration</h2>
 <p>A demo bot is available to try out Aria helper functionality directly. You can access the demo bot by clicking on
   the following:</p>
-<a href="https://line.me/R/ti/p/g3c8dOwDFb"><img src="https://github.com/YiJhu/Aria_helper/blob/main/docs/demon.png"
-    alt="Demo Bot"></a>
-<a href="https://line.me/R/ti/p/g3c8dOwDFb"><img src="https://github.com/YiJhu/Aria_helper/blob/main/docs/add.png"
+<a href="#"><img src="https://github.com/YiJhu/Aria_helper/blob/main/docs/add.png"
     alt="Add Bot"></a>
 
 <h2 id="api-copyright">API Copyright</h2>
