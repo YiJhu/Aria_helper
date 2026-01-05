@@ -1,6 +1,8 @@
 <h1>Aria helper</h1>
 <p>Aria helper is a Python project for the CHRLINE version. The service started in 2018 as a closed source project, but in 2022 I decided to rewrite it in python and make it open source which is what this project is all about, and I used the CHRLINE api because it's the most practical and easiest to use!</p>
 
+[![GitRoll](https://gitroll.io/api/badges/nPyP9wXLA7LLk47dqvEK)](https://gitroll.io/result/repo/nPyP9wXLA7LLk47dqvEK)
+
 <h2>Table of Contents</h2>
 <ul>
   <li><a href="#install">Install</a></li>
